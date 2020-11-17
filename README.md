@@ -1,49 +1,60 @@
 # DKT+
-This is the repository for the code in the paper *Addressing Two Problems in Deep Knowledge Tracing via Prediction-Consistent Regularization* ([ACM](https://dl.acm.org/citation.cfm?id=3231647), [pdf](https://arxiv.org/pdf/1806.02180.pdf))
 
-If you find this repository useful, please cite
-```
-@inproceedings{LS2018_Yeung_DKTP,
-  title={Addressing two problems in deep knowledge tracing via prediction-consistent regularization},
-  author={Yeung, Chun Kit and Yeung, Dit Yan},
-  year={2018},
-  booktitle = {{Proceedings of the 5th ACM Conference on Learning @ Scale}},
-  pages = {5:1--5:10},
-  publisher = {ACM},
-}
-```
+ - DKT 모델의 단점을 보완한 [DKT+](https://github.com/ckyeungac/deep-knowledge-tracing-plus) 모델을 assistment 2009 데이터에 적용.
+ 
+### Dataset Description
 
-## Abstact
-Knowledge tracing is one of the key research areas for empowering personalized education. It is a task to model students' mastery level of a knowledge component (KC) based on their historical learning trajectories. In recent years, a recurrent neural network model called deep knowledge tracing (DKT) has been proposed to handle the knowledge tracing task and literature has shown that DKT generally outperforms traditional methods. However, through our extensive experimentation, we have noticed two major problems in the DKT model. The first problem is that the model fails to reconstruct the observed input. As a result, even when a student performs well on a KC, the prediction of that KC's mastery level decreases instead, and vice versa. Second, the predicted performance across time-steps is not consistent. This is undesirable and unreasonable because student's performance is expected to transit gradually over time. To address these problems, we introduce regularization terms that correspond to \emph{reconstruction} and \textit{waviness} to the loss function of the original DKT model to enhance the consistency in prediction. Experiments show that the regularized loss function effectively alleviates the two problems without degrading the original task of DKT.
+  - [Individual BKT](http://gitlab.tmaxwork.shop/hyperstudy/knowledgetracing/python_kt_unitknowledgetracing/-/tree/individual_bkt)의 individual model dataset을 활용.
+  - 이를 pyBKT dataset format으로 변환했습니다.
 
-## Requirements
-I have used tensorflow to develop the deep knowledge tracing model, and the following is the packages I used:
-```
-tensorflow==1.2.0 (or tensorflow-gpu==1.3.0)
-scikit-learn==0.18.1
-scipy==0.19.0
-numpy==1.13.3
-```
-
-The packages used for the visualization of the student knowledge state are
-```
-seaborn
-matplotlib
-```
-
-## Data Format
-The first line the number of exercises a student attempted. The second line is the exercise tag sequence. The third line is the response sequence.
 ```
 15
 1,1,1,1,7,7,9,10,10,10,10,11,11,45,54
 0,1,1,1,1,1,0,0,1,1,1,1,1,0,0
 ```
 
-## Program Usage
-### Run the experiment
+    - 첫 번째 row = 문제 풀이 시퀀스 개수
+    - 두 번째 row = 스킬 id 시퀀스 (기존 데이터의 skill id를 0 ~ max_skill_num-1 로 맵핑)
+    - 세 번재 row = 정오답 시퀀스
+
+
+
+### How To Run
+
 ```
+pip install -r requirements.txt
 python main.py
 ```
+
+### Test Result
+
+ - ./assist_lsh/ 에 결과 저장
+
+ - Forget parameter 적용
+ ```
+The best testing result occured at: 1-th epoch, with testing AUC: 0.72354
+*********************************
+average AUC for 1 runs: 0.7235410191831241
+average AUC Current for 1 runs: 0.8546168541225564
+average waviness-l1 for 1 runs: 0.0837035549925903
+average waviness-l2 for 1 runs: 0.1313468509359241
+average consistency_m1 for 1 runs: 0.4370631960117092
+average consistency_m1 for 1 runs: 0.06105880186848471
+
+program run for: 5484.073899269104s
+ ```
+
+
+### ToDo
+
+ - DKT + attention : 지추추 결과, 특정 UK에 대한 지식 수준이 낮게 나온 원인이 되는 문제를 도출 --> 맞춤형 강의
+ - DKT + user_id : user_id를 initial hidden state 값으로 설정 --> independent DKT
+
+ - CNN 모델을 통해 해석가능한 AI 여부 조사 예정
+  - CNN의 feature map을 활용.
+  - sequential data에 대한 CNN 적용 사례를 기반으로, feature map 강도에 따라 학습 정도를 파악할 수 있음.
+  - 모델이 잘 학습할 수 있는 input 시퀀스, 즉 문제 시퀀스를 생성.
+
 
 ### Detail hyperparameter for the program
 ```
@@ -93,4 +104,20 @@ optional arguments:
   -csd CKPT_SAVE_DIR, --ckpt_save_dir CKPT_SAVE_DIR
                         checkpoint save directory
   --dataset DATASET
+```
+
+
+### Citation
+
+This is the repository for the code in the paper *Addressing Two Problems in Deep Knowledge Tracing via Prediction-Consistent Regularization* ([ACM](https://dl.acm.org/citation.cfm?id=3231647), [pdf](https://arxiv.org/pdf/1806.02180.pdf))
+
+```
+@inproceedings{LS2018_Yeung_DKTP,
+  title={Addressing two problems in deep knowledge tracing via prediction-consistent regularization},
+  author={Yeung, Chun Kit and Yeung, Dit Yan},
+  year={2018},
+  booktitle = {{Proceedings of the 5th ACM Conference on Learning @ Scale}},
+  pages = {5:1--5:10},
+  publisher = {ACM},
+}
 ```
