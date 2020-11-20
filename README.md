@@ -16,6 +16,12 @@
 0,1,1,1,1,1,0,0,1,1,1,1,1,0,0
 ```
 
+### Model Addition
+
+  - DKT+skill embedding layer
+    - Input과 LSTM input 사이 embedding layer 추가 (embedding 차원=200)
+    - main.py의 network_config['embedding'] = True/False 로 조절
+
 
 ### How To Run
 
@@ -55,7 +61,7 @@ program run for: 5484.073899269104s
 
 ### Detail hyperparameter for the program
 ```
-usage: main.py [-h]
+usage: main_origin.py [-h]
                [-hl [HIDDEN_LAYER_STRUCTURE [HIDDEN_LAYER_STRUCTURE ...]]]
                [-cell {LSTM,GRU,BasicRNN,LayerNormBasicLSTM}]
                [-lr LEARNING_RATE] [-kp KEEP_PROB] [-mgn MAX_GRAD_NORM]
@@ -101,6 +107,8 @@ optional arguments:
   -csd CKPT_SAVE_DIR, --ckpt_save_dir CKPT_SAVE_DIR
                         checkpoint save directory
   --dataset DATASET
+  -emb EMBEDDING, --embedding EMBEDDING
+                        Whether to add skill embedding layer after input
 ```
 
 

@@ -40,6 +40,8 @@ parser.add_argument("-lw2", "--lambda_w2", type=float, default=0.00,
                     help="The lambda coefficient for the regularization waviness with l2-norm.")
 parser.add_argument("-lo", "--lambda_o", type=float, default=0.00,
                     help="The lambda coefficient for the regularization objective.")
+parser.add_argument("-emb", "--embedding", type=bool, default=False,
+                    help="Whether to add skill embedding layer after input.")
 # training configuration
 parser.add_argument("--num_runs", type=int, default=1,
                     help="Number of runs to repeat the experiment.")
@@ -109,6 +111,7 @@ network_config['rnn_cell'] = rnn_cells[args.rnn_cell]
 network_config['lambda_w1'] = args.lambda_w1
 network_config['lambda_w2'] = args.lambda_w2
 network_config['lambda_o'] = args.lambda_o
+network_config['embedding'] = args.embedding
 
 num_runs = args.num_runs
 num_epochs = args.num_epochs
