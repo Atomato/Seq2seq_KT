@@ -48,10 +48,11 @@ class DKT(object):
         layer_structure_str = "-".join([str(i) for i in network_config['hidden_layer_structure']])
         model_name = self.model_name = cell_type_str + '-' + layer_structure_str
 
-        save_dir_name = 'n{}.lo{}.lw1{}.lw2{}/'.format(layer_structure_str,
+        save_dir_name = 'n{}.lo{}.lw1{}.lw2{}.emb{}/'.format(layer_structure_str,
                                                     network_config['lambda_o'],
                                                     network_config['lambda_w1'],
-                                                    network_config['lambda_w2'])
+                                                    network_config['lambda_w2'],
+                                                    network_config['embedding'])
         self.ckpt_save_dir = os.path.join(save_dir_prefix, 'checkpoints', save_dir_name)
         self.log_save_dir = os.path.join(save_dir_prefix, 'logs', save_dir_name)
         print('ckpt_save_dir: ', self.ckpt_save_dir)

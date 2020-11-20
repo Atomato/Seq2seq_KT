@@ -27,6 +27,7 @@ class Model(object):
                  lambda_w1 = 0.0,
                  lambda_w2 = 0.0,
                  lambda_o = 0.0,
+                 embedding = False,
                  **kwargs):
         # dataset-dependent attributes
         self.num_problems = num_problems
@@ -38,6 +39,8 @@ class Model(object):
         self.lambda_w1 = lambda_w1 # regularization parameter for waviness for l1-norm
         self.lambda_w2 = lambda_w2 # regularization parameter for waviness for l1-norm
         self.lambda_o = lambda_o # regularization parameter for objective function
+        self.embedding = embedding # embedding layer or not
+        self.embedding_dims = 200
 
     def _create_placeholder(self):
         print("Creating placeholder...")
@@ -51,6 +54,23 @@ class Model(object):
         self.hidden_layer_input = self.X
         self.seq_length = length(self.X)
 
+    def _input_embedding(self):
+        X = self.X
+        # Embedding Layer Construction
+        with tf.variable_scope("embedding_layer", reuse=tf.get_variable_scope().reuse):
+            W_emb = tf.get_variable("weights", shape=[2* self.num_problems, self.embedding_dims],
+                                   initializer=tf.random_normal_initializer(stddev=1.0 / np.sqrt(self.embedding_dims)))
+            b_emb = tf.get_variable("biases", shape=[self.embedding_dims, ],
+                                   initializer=tf.random_normal_initializer(stddev=1.0 / np.sqrt(self.embedding_dims)))
+
+            # Flatten the embed layer output
+            num_steps = tf.shape(X)[1]
+            self.inputs_flat = tf.reshape(X, shape=[-1, 2* self.num_problems])
+            self.embed_outputs_flat = tf.matmul(self.inputs_flat, W_emb) + b_emb
+            self.embed_outputs = tf.reshape(self.embed_outputs_flat, shape=[-1, num_steps, self.embedding_dims])
+        
+        self.hidden_layer_input = self.embed_outputs
+    
     def _influence(self):
         print("Creating Loss...")
         hidden_layer_structure = self.hidden_layer_structure
@@ -157,6 +177,8 @@ class Model(object):
 
     def build_graph(self):
         self._create_placeholder()
+        if self.embedding:
+            self._input_embedding()
         self._influence()
         self._create_loss()
         self._create_optimizer()
