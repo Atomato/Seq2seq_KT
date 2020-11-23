@@ -22,7 +22,7 @@ rnn_cells = {
 }
 
 network_config = {}
-network_config['batch_size'] = 32
+network_config['batch_size'] = 64
 network_config['hidden_layer_structure'] = [200, ]
 network_config['learning_rate'] = 1e-2
 network_config['keep_prob'] = 0.5
@@ -33,12 +33,12 @@ network_config['lambda_w2'] = 0.00
 network_config['lambda_o'] = 0.00
 network_config['embedding'] = False
 
-num_runs = 1
+num_runs = 5
 num_epochs = 30
-batch_size = 32
+batch_size = 64
 keep_prob = 0.5
 
-dataset = 'toy'
+dataset = 'a2009u'
 if dataset == 'a2009u':
     train_path = './data/assist2009_updated/assist2009_updated_train.csv'
     test_path = './data/assist2009_updated/assist2009_updated_test.csv'
