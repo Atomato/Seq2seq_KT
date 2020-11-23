@@ -10,11 +10,11 @@
     - 두 번째 row = 스킬 id 시퀀스 (기존 데이터의 skill id를 0 ~ max_skill_num-1 로 맵핑)
     - 세 번재 row = 정오답 시퀀스
 
-```
-15
-1,1,1,1,7,7,9,10,10,10,10,11,11,45,54
-0,1,1,1,1,1,0,0,1,1,1,1,1,0,0
-```
+    ```
+    15
+    1,1,1,1,7,7,9,10,10,10,10,11,11,45,54
+    0,1,1,1,1,1,0,0,1,1,1,1,1,0,0
+    ```
 
 ### Model Addition
 
@@ -32,26 +32,40 @@ python main.py
 
 ### Test Result
 
- - ./assist_lsh/ 에 결과 저장
+ - 5번의 모델 학습 반복 및 평균 성능 기록.
 
- ```
-The best testing result occured at: 1-th epoch, with testing AUC: 0.72354
-*********************************
-average AUC for 1 runs: 0.7235410191831241
-average AUC Current for 1 runs: 0.8546168541225564
-average waviness-l1 for 1 runs: 0.0837035549925903
-average waviness-l2 for 1 runs: 0.1313468509359241
-average consistency_m1 for 1 runs: 0.4370631960117092
-average consistency_m1 for 1 runs: 0.06105880186848471
+ - ./results/a2009u/ 에 결과 저장.
 
-program run for: 5484.073899269104s
- ```
+ - embedding = False
 
+     ```
+    The best testing result occured at: 6-th epoch, with testing AUC: 0.82165
+    *********************************
+    average AUC for 5 runs: 0.8220155373849579
+    average AUC Current for 5 runs: 0.870065672603247
+    average waviness-l1 for 5 runs: 0.07280272439391001
+    average waviness-l2 for 5 runs: 0.11449000715743937
+    average consistency_m1 for 5 runs: 0.2798314292562115
+    average consistency_m1 for 5 runs: 0.0033070810666559146
+     ```
+
+ - embedding = True
+
+    ```
+    The best testing result occured at: 11-th epoch, with testing AUC: 0.82561
+    *********************************
+    average AUC for 5 runs: 0.8259260836995208
+    average AUC Current for 5 runs: 0.8538206911834502
+    average waviness-l1 for 5 runs: 0.10955865416504809
+    average waviness-l2 for 5 runs: 0.17086800366663718
+    average consistency_m1 for 5 runs: 0.24320923543980189
+    average consistency_m1 for 5 runs: -0.0015450966547946347
+     ```
 
 ### ToDo
 
-  - DKT + attention : 지추추 결과, 특정 UK에 대한 지식 수준이 낮게 나온 원인이 되는 문제를 도출 --> 맞춤형 강의
-  - DKT + user_id : user_id를 initial hidden state 값으로 설정 --> independent DKT
+  - 1. DKT + user_id : user_id를 initial hidden state 값으로 설정 --> independent DKT
+  - 2. DKT + attention : 지추추 결과, 특정 UK에 대한 지식 수준이 낮게 나온 원인이 되는 문제를 도출 --> 맞춤형 강의
 
   - CNN 모델을 통해 해석가능한 AI 여부 조사 예정
     - CNN의 feature map을 활용.
