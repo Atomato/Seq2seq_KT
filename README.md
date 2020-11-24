@@ -11,11 +11,11 @@
     - 세 번재 row = 정오답 시퀀스
 
 
-    ```
-    15
-    1,1,1,1,7,7,9,10,10,10,10,11,11,45,54
-    0,1,1,1,1,1,0,0,1,1,1,1,1,0,0
-    ```
+  ```
+  15
+  1,1,1,1,7,7,9,10,10,10,10,11,11,45,54
+  0,1,1,1,1,1,0,0,1,1,1,1,1,0,0
+  ```
 
 ### Model Addition
 
@@ -101,12 +101,14 @@ python main.py
     - user_id에 따라 initial hidden state 값을 달리 설정.
     - user embedding 학습.
     - independent DKT.
+<br>
 
 2. **Attention DKT+**
     - Embedding layer output에 대한 attention 적용.
     - Hidden state들에 대한 attention 적용.
     - 특정 UK에 대한 지식 수준이 낮게 나온 원인이 되는 문제를 도출.
     - 맞춤형 강의에 활용 가능.
+<br>
 
 3. **Convolutional DKT**
     - CNN의 feature map을 활용.
