@@ -1,6 +1,6 @@
 # DKT+
 
- - DKT 모델의 단점을 보완한 [DKT+](https://github.com/ckyeungac/deep-knowledge-tracing-plus) 모델을 assistment 2009 데이터에 적용.
+ - DKT 모델의 단점을 보완한 [DKT+](https://github.com/ckyeungac/deep-knowledge-tracing-plus) 모델 기반 기능 추가 개발.
  
 ### Dataset Description
 
@@ -19,9 +19,9 @@
 
 ### Model Addition
 
-  - DKT+skill embedding layer
+1. **Skill Embedded DKT+**
     - Input과 LSTM input 사이 embedding layer 추가 (embedding 차원=200)
-    - main.py의 network_config['embedding'] = True/False 로 조절
+    - main.py의 network_config['embedding'] = *True*/*False* 로 조절
 
 
 ### How To Run
@@ -33,44 +33,85 @@ python main.py
 
 ### Test Result
 
- - 5번의 모델 학습 반복 및 평균 성능 기록.
- - ./results/a2009u/ 에 결과 저장.
+#### 1. Assistment 2009
+  - 5번의 모델 학습 반복 및 평균 성능 기록.
+  - ./results/a2009u/ 에 결과 저장.
 
- - embedding = False
+1. **model = DKT**
+    - $\lambda_0$ = 0.0, $\lambda_{w1}$ = 0.0, $\lambda_{w2}$ = 0.0
 
-     ```
-    The best testing result occured at: 6-th epoch, with testing AUC: 0.82165
-    *********************************
-    average AUC for 5 runs: 0.8220155373849579
-    average AUC Current for 5 runs: 0.870065672603247
-    average waviness-l1 for 5 runs: 0.07280272439391001
-    average waviness-l2 for 5 runs: 0.11449000715743937
-    average consistency_m1 for 5 runs: 0.2798314292562115
-    average consistency_m1 for 5 runs: 0.0033070810666559146
-     ```
+    - embedding = *False*
 
- - embedding = True
+      ```
+      The best testing result occured at: 6-th epoch, with testing AUC: 0.82165
+      *********************************
+      average AUC for 5 runs: 0.8220155373849579
+      average AUC Current for 5 runs: 0.870065672603247
+      average waviness-l1 for 5 runs: 0.07280272439391001
+      average waviness-l2 for 5 runs: 0.11449000715743937
+      average consistency_m1 for 5 runs: 0.2798314292562115
+      average consistency_m1 for 5 runs: 0.0033070810666559146
+      ```
 
-    ```
-    The best testing result occured at: 11-th epoch, with testing AUC: 0.82561
-    *********************************
-    average AUC for 5 runs: 0.8259260836995208
-    average AUC Current for 5 runs: 0.8538206911834502
-    average waviness-l1 for 5 runs: 0.10955865416504809
-    average waviness-l2 for 5 runs: 0.17086800366663718
-    average consistency_m1 for 5 runs: 0.24320923543980189
-    average consistency_m1 for 5 runs: -0.0015450966547946347
-     ```
+    - embedding = *True*
+
+      ```
+      The best testing result occured at: 11-th epoch, with testing AUC: 0.82561
+      *********************************
+      average AUC for 5 runs: 0.8259260836995208
+      average AUC Current for 5 runs: 0.8538206911834502
+      average waviness-l1 for 5 runs: 0.10955865416504809
+      average waviness-l2 for 5 runs: 0.17086800366663718
+      average consistency_m1 for 5 runs: 0.24320923543980189
+      average consistency_m1 for 5 runs: -0.0015450966547946347
+      ```
+
+2. **model = DKT+**
+    - $\lambda_0$ = 0.1, $\lambda_{w1}$ = 0.03, $\lambda_{w2}$ = 3.0
+
+    - embedding = *False*
+
+      ```
+      The best testing result occured at: 15-th epoch, with testing AUC: 0.82504
+      *********************************
+      average AUC for 5 runs: 0.824335969028188
+      average AUC Current for 5 runs: 0.9552285615588921
+      average waviness-l1 for 5 runs: 0.02060184455219459
+      average waviness-l2 for 5 runs: 0.04679744589296681
+      average consistency_m1 for 5 runs: 0.40512902452664373
+      average consistency_m1 for 5 runs: 0.06847989052936485
+      ```
+
+    - embedding = *True*
+
+        ```
+        The best testing result occured at: 15-th epoch, with testing AUC: 0.82623
+        *********************************
+        average AUC for 5 runs: 0.8258746705334745
+        average AUC Current for 5 runs: 0.9540060738507712
+        average waviness-l1 for 5 runs: 0.021970434304943567
+        average waviness-l2 for 5 runs: 0.04869209260507832
+        average consistency_m1 for 5 runs: 0.40452983941839105
+        average consistency_m1 for 5 runs: 0.06714509249541853
+        ```
 
 ### ToDo
 
-  - 1. DKT + user_id : user_id를 initial hidden state 값으로 설정 --> independent DKT
-  - 2. DKT + attention : 지추추 결과, 특정 UK에 대한 지식 수준이 낮게 나온 원인이 되는 문제를 도출 --> 맞춤형 강의
+1. **User specific DKT+**
+    - user_id에 따라 initial hidden state 값을 달리 설정.
+    - user embedding 학습.
+    - independent DKT.
 
-  - 3. CNN 모델을 통해 해석가능한 AI 여부 조사 예정
+2. **Attention DKT+**
+    - Embedding layer output에 대한 attention 적용.
+    - Hidden state들에 대한 attention 적용.
+    - 특정 UK에 대한 지식 수준이 낮게 나온 원인이 되는 문제를 도출.
+    - 맞춤형 강의에 활용 가능.
+
+3. **Convolutional DKT**
     - CNN의 feature map을 활용.
-    - sequential data에 대한 CNN 적용 사례를 기반으로, feature map 강도에 따라 학습 정도를 파악할 수 있음.
-    - 모델이 잘 학습할 수 있는 input 시퀀스, 즉 문제 시퀀스를 생성.
+    - sequential data에 대한 CNN 적용 사례를 기반으로, feature map 강도에 따라 모델의 학습 정도를 파악할 수 있음.
+    - 모델이 잘 학습할 수 있는 input 시퀀스, 즉 문제 시퀀스를 생성 및 추천
 
 
 ### Detail hyperparameter for the program

@@ -28,9 +28,9 @@ network_config['learning_rate'] = 1e-2
 network_config['keep_prob'] = 0.5
 network_config['rnn_cell'] = rnn_cells['LSTM']
 network_config['max_grad_norm'] = 5.0
-network_config['lambda_w1'] = 0.00
-network_config['lambda_w2'] = 0.00
-network_config['lambda_o'] = 0.00
+network_config['lambda_w1'] = 0.003
+network_config['lambda_w2'] = 3.0
+network_config['lambda_o'] = 0.1
 network_config['embedding'] = False
 
 num_runs = 5
