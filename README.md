@@ -10,6 +10,7 @@
     - 두 번째 row = 스킬 id 시퀀스 (기존 데이터의 skill id를 0 ~ max_skill_num-1 로 맵핑)
     - 세 번재 row = 정오답 시퀀스
 
+
     ```
     15
     1,1,1,1,7,7,9,10,10,10,10,11,11,45,54
@@ -33,7 +34,6 @@ python main.py
 ### Test Result
 
  - 5번의 모델 학습 반복 및 평균 성능 기록.
-
  - ./results/a2009u/ 에 결과 저장.
 
  - embedding = False
@@ -67,7 +67,7 @@ python main.py
   - 1. DKT + user_id : user_id를 initial hidden state 값으로 설정 --> independent DKT
   - 2. DKT + attention : 지추추 결과, 특정 UK에 대한 지식 수준이 낮게 나온 원인이 되는 문제를 도출 --> 맞춤형 강의
 
-  - CNN 모델을 통해 해석가능한 AI 여부 조사 예정
+  - 3. CNN 모델을 통해 해석가능한 AI 여부 조사 예정
     - CNN의 feature map을 활용.
     - sequential data에 대한 CNN 적용 사례를 기반으로, feature map 강도에 따라 학습 정도를 파악할 수 있음.
     - 모델이 잘 학습할 수 있는 input 시퀀스, 즉 문제 시퀀스를 생성.
