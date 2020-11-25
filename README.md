@@ -1,6 +1,11 @@
-# DKT+
+# Skill Embedded DKT
 
- - DKT 모델의 단점을 보완한 [DKT+](https://github.com/ckyeungac/deep-knowledge-tracing-plus) 모델 기반 기능 추가 개발.
+ - DKT 모델의 단점을 보완한 [DKT+](https://github.com/ckyeungac/deep-knowledge-tracing-plus) 모델 기반 지식 추적 모델 구현.
+ 
+ - **Skill Embedded DKT+**
+    - Input과 LSTM input 사이 embedding layer 추가 (embedding 차원=200)
+    - main.py의 network_config['embedding'] = *True*/*False* 로 조절
+ 
  
 ### Dataset Description
 
@@ -17,12 +22,6 @@
   0,1,1,1,1,1,0,0,1,1,1,1,1,0,0
   ```
 
-### Model Addition
-
-1. **Skill Embedded DKT+**
-    - Input과 LSTM input 사이 embedding layer 추가 (embedding 차원=200)
-    - main.py의 network_config['embedding'] = *True*/*False* 로 조절
-
 
 ### How To Run
 
@@ -30,6 +29,7 @@
 pip install -r requirements.txt
 python main.py
 ```
+
 
 ### Test Result
 
@@ -95,12 +95,12 @@ python main.py
         average consistency_m1 for 5 runs: 0.06714509249541853
         ```
 
+
 ### ToDo
 
 1. **User specific DKT+**
-    - user_id에 따라 initial hidden state 값을 달리 설정.
+    - user_id에 따라 initial hidden state 값을 달리 설정. [user_specific_dkt](http://gitlab.tmaxwork.shop/hyperstudy/knowledgetracing/python_kt_unitknowledgetracing/-/tree/user_specific_dkt)
     - user embedding 학습.
-    - independent DKT.
 <br>
 
 2. **Attention DKT+**
