@@ -33,6 +33,7 @@ network_config['lambda_w2'] = 3.0
 network_config['lambda_o'] = 0.1
 network_config['embedding'] = True
 network_config['separate_embedding'] = True
+network_config['expand_dim'] = False
 
 num_runs = 5
 num_epochs = 30

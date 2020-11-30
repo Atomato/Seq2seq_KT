@@ -29,6 +29,7 @@ class Model(object):
                  lambda_o = 0.0,
                  embedding = False,
                  separate_embedding = False,
+                 expand_dim = False,
                  **kwargs):
         # dataset-dependent attributes
         self.num_problems = num_problems
@@ -42,6 +43,7 @@ class Model(object):
         self.lambda_o = lambda_o # regularization parameter for objective function
         self.embedding = embedding # embedding layer or not
         self.separate_embedding = separate_embedding # skill-separated embedding or not
+        self.expand_dim = expand_dim
         self.embedding_dims = 200
 
     def _create_placeholder(self):
@@ -86,12 +88,19 @@ class Model(object):
             num_steps = tf.shape(X)[1]
             X_prob = X[:,:,:self.num_problems]
             X_corr = X[:,:,self.num_problems:]
+            zero = tf.constant(0, dtype=tf.float32)
+            X_equal_one = tf.reduce_any(tf.not_equal(X_corr, zero), 2)
+            X_correct_expand = tf.expand_dims(tf.cast(X_equal_one, tf.float32), 2)
+            if self.expand_dim:
+                X_correct_expand = tf.tile(X_correct_expand, [1,1,self.num_problems])
+            
             self.inputs_flat = tf.reshape(X_prob, shape=[-1, self.num_problems])
             self.embed_outputs_flat = tf.matmul(self.inputs_flat, W_emb) + b_emb
-            self.prob_embeds = tf.reshape(self.embed_outputs_flat, shape=[-1, num_steps, self.embedding_dims])
-            self.concatenated_embeds = tf.concat([self.prob_embeds, ])
+            self.skill_embeds = tf.reshape(self.embed_outputs_flat, shape=[-1, num_steps, self.embedding_dims])
+            self.concatenated_embeds = tf.concat([self.skill_embeds, X_correct_expand], axis=2)
         
         self.hidden_layer_input = self.concatenated_embeds
+        print(f"LSTM input shape: {np.shape(self.hidden_layer_input)}")
 
     def _influence(self):
         print("Creating Loss...")
