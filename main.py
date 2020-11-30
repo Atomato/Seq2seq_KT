@@ -32,15 +32,16 @@ network_config['lambda_w1'] = 0.003
 network_config['lambda_w2'] = 3.0
 network_config['lambda_o'] = 0.1
 network_config['embedding'] = True
+network_config['separate_embedding'] = True
 
 num_runs = 5
 num_epochs = 30
 batch_size = 128
 keep_prob = 0.5
 
-train_path = './data/assistment_1127/assistment_1127_train.csv'
-valid_path = './data/assistment_1127/assistment_1127_valid.csv'
-test_path = './data/assistment_1127/assistment_1127_test.csv'
+train_path = './data/ASSISTment_skill_builder_only_1127/assistment_1127_train.csv'
+valid_path = './data/ASSISTment_skill_builder_only_1127/assistment_1127_valid.csv'
+test_path = './data/ASSISTment_skill_builder_only_1127/assistment_1127_test.csv'
 save_dir_prefix = './results/assitment_1127/'
 
 
