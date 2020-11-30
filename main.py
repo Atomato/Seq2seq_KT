@@ -31,11 +31,11 @@ network_config['max_grad_norm'] = 5.0
 network_config['lambda_w1'] = 0.003
 network_config['lambda_w2'] = 3.0
 network_config['lambda_o'] = 0.1
-network_config['embedding'] = False
+network_config['embedding'] = True
 
 num_runs = 5
 num_epochs = 30
-batch_size = 64
+batch_size = 128
 keep_prob = 0.5
 
 train_path = './data/assistment_1127/assistment_1127_train.csv'

@@ -103,11 +103,12 @@ class DKT(object):
             loss = (iteration - 1) / iteration * loss + _loss / iteration
             iteration += 1
         try:
-            acc_score = accuracy_score(y_true, y_pred)
+            acc_score = accuracy_score(np.array(y_true), np.round(y_pred))
             fpr, tpr, thres = roc_curve(y_true, y_pred, pos_label=1)
             auc_score = auc(fpr, tpr)
         except ValueError:
-            self._log("Value Error is encountered during finding the auc_score. Assign the AUC to 0 now.")
+            self._log("Value Error is encountered during finding the acc_score and auc_score. Assign the AUC to 0 now.")
+            acc_score = 0.0
             auc_score = 0.0
             loss = 999999.9
 
@@ -157,7 +158,7 @@ class DKT(object):
             loss = (iteration - 1) / iteration * loss + _loss / iteration
             iteration += 1
         try:
-            acc_score = accuracy_score(y_true, y_pred)
+            acc_score = accuracy_score(np.array(y_true), np.round(y_pred))
             fpr, tpr, thres = roc_curve(y_true, y_pred, pos_label=1)
             auc_score = auc(fpr, tpr)
             fpr, tpr, thres = roc_curve(y_true_current, y_pred_current, pos_label=1)
@@ -188,8 +189,12 @@ class DKT(object):
         self.consistency_m1 = []
         self.consistency_m2 = []
         for run_idx in range(num_runs):
+            print(f"\n{run_idx+1} th repeat training ..")
             self.run_count = run_idx
             sess.run(tf.global_variables_initializer())
+            acc_test = 0.0
+            auc_test = 0.0
+            auc_current_test = 0.0
             best_valid_acc = 0.0
             best_valid_auc = 0.0
             best_valid_auc_current = 0.0 # the auc_current when the test_auc is the best.
@@ -225,6 +230,14 @@ class DKT(object):
                     best_valid_auc_current = auc_current_valid
                     best_waviness_l1, best_waviness_l2 = self.waviness('valid')
 
+                    acc_test, auc_test, auc_current_test, loss_test = self.evaluate('test')
+                    valid_msg += "\nEpoch {:>4}, Test ACC: {:.5}, Test AUC: {:.5}, Test AUC Curr: {:.5}, Test Loss: {:.5}".format(
+                        epoch_idx + 1,
+                        acc_test,
+                        auc_test,
+                        auc_current_test,
+                        loss_test)
+
                     # finding m1, m2
                     m1, m2 = self.consistency('valid')
                     best_consistency_m1 = m1
@@ -235,9 +248,6 @@ class DKT(object):
                     if self.save:
                         valid_msg += ". Saving the model"
                         self.save_model()
-                    
-                    acc_test, auc_test, auc_current_test, loss_test = self.evaluate('test')
-                    
                     
                 self._log(valid_msg)
 
@@ -253,9 +263,9 @@ class DKT(object):
                 # shuffle the training dataset
                 self.data_train.shuffle()
                 
-            self._log("The best testing result occured at: {0}-th epoch, with validation ACC: {1:.5} and AUC: {2:.5}".format(
+            self._log("The best validation result occured at: {0}-th epoch, with validation ACC: {1:.5} and AUC: {2:.5}".format(
                 best_epoch_idx, best_valid_acc, best_valid_auc))
-            self._log("The best testing result occured at: {0}-th epoch, with testing AUC: {2:.5}".format(
+            self._log("The best testing result occured at: {0}-th epoch, with testing ACC: {1:.5} and AUC: {2:.5}".format(
                 best_epoch_idx, acc_test, auc_test))
             
             self._log(SPLIT_MSG * 3)
@@ -284,12 +294,12 @@ class DKT(object):
         self._log("average validation ACC for {0} runs: {1}".format(num_runs, avg_acc))
         self._log("average validation AUC for {0} runs: {1}".format(num_runs, avg_auc))
         self._log("average validation AUC Current for {0} runs: {1}".format(num_runs, avg_auc_current))
-        self._log("average waviness-l1 for {0} runs: {1}".format(num_runs, avg_waviness_l1))
+        self._log("\naverage waviness-l1 for {0} runs: {1}".format(num_runs, avg_waviness_l1))
         self._log("average waviness-l2 for {0} runs: {1}".format(num_runs, avg_waviness_l2))
         self._log("average consistency_m1 for {0} runs: {1}".format(num_runs, avg_consistency_m1))
         self._log("average consistency_m1 for {0} runs: {1}".format(num_runs, avg_consistency_m2))
         
-        self._log("\n average test ACC for {0} runs: {1}".format(num_runs, avg_test_acc))
+        self._log("\naverage test ACC for {0} runs: {1}".format(num_runs, avg_test_acc))
         self._log("average test AUC for {0} runs: {1}".format(num_runs, avg_test_auc))
         self._log("average test AUC Current for {0} runs: {1}\n".format(num_runs, avg_test_auc_current))
         
