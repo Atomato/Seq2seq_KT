@@ -1,6 +1,6 @@
 import os, sys, time
 import tensorflow as tf
-from sklearn.metrics import roc_curve, auc
+from sklearn.metrics import roc_curve, auc, accuracy_score
 from load_data import OriginalInputProcessor
 from model import Model
 import numpy as np
@@ -22,14 +22,16 @@ def _seq_length(sequence):
 
 
 class DKT(object):
-    def __init__(self, sess, data_train, data_test, num_problems, network_config, save_dir_prefix='./',
-                 num_runs=5, num_epochs=500, keep_prob=0.5, logging=True, save=True):
+    def __init__(self, sess, data_train, data_valid, data_test, num_problems, network_config, 
+                 save_dir_prefix='./', num_runs=5, num_epochs=500, keep_prob=0.5, logging=True, 
+                 save=True):
         # the tensorflow session used
         self.sess = sess
 
         # data that used to train and test
         # it is expected to has the next_batch() functions to return the desired data structure fit to the Model.
         self.data_train = data_train
+        self.data_valid = data_valid
         self.data_test = data_test
 
         # network configuration and model initialization
@@ -101,6 +103,7 @@ class DKT(object):
             loss = (iteration - 1) / iteration * loss + _loss / iteration
             iteration += 1
         try:
+            acc_score = accuracy_score(y_true, y_pred)
             fpr, tpr, thres = roc_curve(y_true, y_pred, pos_label=1)
             auc_score = auc(fpr, tpr)
         except ValueError:
@@ -108,11 +111,13 @@ class DKT(object):
             auc_score = 0.0
             loss = 999999.9
 
-        return auc_score, loss
+        return acc_score, auc_score, loss
 
-    def evaluate(self, is_train=False):
-        if is_train:
+    def evaluate(self, mode='valid'):
+        if mode == 'train':
             data = self.data_train
+        elif mode == 'valid':
+            data = self.data_valid
         else:
             data = self.data_test
 
@@ -126,6 +131,7 @@ class DKT(object):
         y_true_current = []
         iteration = 1
         loss = 0.0
+        acc_score = 0.0
         auc_score_current = 0.0
         auc_score = 0.0
         for batch_idx in range(data.num_batches):
@@ -151,17 +157,19 @@ class DKT(object):
             loss = (iteration - 1) / iteration * loss + _loss / iteration
             iteration += 1
         try:
+            acc_score = accuracy_score(y_true, y_pred)
             fpr, tpr, thres = roc_curve(y_true, y_pred, pos_label=1)
             auc_score = auc(fpr, tpr)
             fpr, tpr, thres = roc_curve(y_true_current, y_pred_current, pos_label=1)
             auc_score_current = auc(fpr, tpr)
         except ValueError:
             self._log("Value Error is encountered during finding the auc_score. Assign the AUC to 0 now.")
+            acc_score = 0.0
             auc_score = 0.0
             auc_score_current = 0.0
             loss = 999999.9
 
-        return auc_score, auc_score_current, loss
+        return acc_score, auc_score, auc_score_current, loss
 
     def run_optimization(self):
         num_epochs = self.num_epochs
@@ -169,7 +177,11 @@ class DKT(object):
         sess = self.sess
 
         total_auc = 0.0
+        self.accs = []
         self.aucs = []
+        self.test_accs = []
+        self.test_aucs = []
+        self.test_aucs_current = []
         self.aucs_current = []
         self.wavinesses_l1 = []
         self.wavinesses_l2 = []
@@ -178,8 +190,9 @@ class DKT(object):
         for run_idx in range(num_runs):
             self.run_count = run_idx
             sess.run(tf.global_variables_initializer())
-            best_test_auc = 0.0
-            best_test_auc_current = 0.0 # the auc_current when the test_auc is the best.
+            best_valid_acc = 0.0
+            best_valid_auc = 0.0
+            best_valid_auc_current = 0.0 # the auc_current when the test_auc is the best.
             best_waviness_l1 = 0.0
             best_waviness_l2 = 0.0
             best_consistency_m1 = 0.0
@@ -188,39 +201,45 @@ class DKT(object):
             best_epoch_idx = 0
             for epoch_idx in range(num_epochs):
                 epoch_start_time = time.time()
-                auc_train, loss_train = self.train()
+                acc_train, auc_train, loss_train = self.train()
                 self._log(
-                    'Epoch {0:>4}, Train AUC: {1:.5}, Train Loss: {2:.5}'.format(epoch_idx + 1, auc_train, loss_train))
+                    'Epoch {0:>4}, Train ACC: {1:.5}, Train AUC: {2:.5}, Train Loss: {3:.5}'.format(epoch_idx + 1, acc_train, auc_train, loss_train))
 
-                auc_test, auc_current_test, loss_test = self.evaluate()
-                test_msg = "Epoch {:>4}, Test AUC: {:.5}, Test AUC Curr: {:.5}, Test Loss: {:.5}".format(
+                acc_valid, auc_valid, auc_current_valid, loss_valid = self.evaluate('valid')
+                valid_msg = "Epoch {:>4}, Valid ACC: {:.5}, Valid AUC: {:.5}, Valid AUC Curr: {:.5}, Valid Loss: {:.5}".format(
                     epoch_idx + 1,
-                    auc_test,
-                    auc_current_test,
-                    loss_test)
+                    acc_valid,
+                    auc_valid,
+                    auc_current_valid,
+                    loss_valid)
 
-                if auc_train == 0 and auc_test == 0:
+                if auc_train == 0 and auc_valid == 0:
                     self._log("ValueError occur, break the epoch loop.")
                     break
 
-                if auc_test > best_test_auc:
-                    test_msg += "*"
+                if auc_valid > best_valid_auc:
+                    valid_msg += "*"
                     best_epoch_idx = epoch_idx
-                    best_test_auc = auc_test
-                    best_test_auc_current = auc_current_test
-                    best_waviness_l1, best_waviness_l2 = self.waviness(is_train=False)
+                    best_valid_acc = acc_valid
+                    best_valid_auc = auc_valid
+                    best_valid_auc_current = auc_current_valid
+                    best_waviness_l1, best_waviness_l2 = self.waviness('valid')
 
                     # finding m1, m2
-                    m1, m2 = self.consistency(is_train=False)
+                    m1, m2 = self.consistency('valid')
                     best_consistency_m1 = m1
                     best_consistency_m2 = m2
 
-                    test_msg += "\nw_l1: {0:5}, w_l2: {1:5}".format(best_waviness_l1, best_waviness_l2)
-                    test_msg += "\nm1: {0:5}, m2: {1:5}".format(best_consistency_m1, best_consistency_m2)
+                    valid_msg += "\nw_l1: {0:5}, w_l2: {1:5}".format(best_waviness_l1, best_waviness_l2)
+                    valid_msg += "\nm1: {0:5}, m2: {1:5}".format(best_consistency_m1, best_consistency_m2)
                     if self.save:
-                        test_msg += ". Saving the model"
+                        valid_msg += ". Saving the model"
                         self.save_model()
-                self._log(test_msg)
+                    
+                    acc_test, auc_test, auc_current_test, loss_test = self.evaluate('test')
+                    
+                    
+                self._log(valid_msg)
 
                 epoch_end_time = time.time()
                 self._log("time used for this epoch: {0}s".format(epoch_end_time - epoch_start_time))
@@ -233,31 +252,49 @@ class DKT(object):
                 sys.stdout.flush()
                 # shuffle the training dataset
                 self.data_train.shuffle()
-            self._log("The best testing result occured at: {0}-th epoch, with testing AUC: {1:.5}".format(
-                best_epoch_idx, best_test_auc))
+                
+            self._log("The best testing result occured at: {0}-th epoch, with validation ACC: {1:.5} and AUC: {2:.5}".format(
+                best_epoch_idx, best_valid_acc, best_valid_auc))
+            self._log("The best testing result occured at: {0}-th epoch, with testing AUC: {2:.5}".format(
+                best_epoch_idx, acc_test, auc_test))
+            
             self._log(SPLIT_MSG * 3)
             self.wavinesses_l1.append(best_waviness_l1)
             self.wavinesses_l2.append(best_waviness_l2)
-            self.aucs.append(best_test_auc)
-            self.aucs_current.append(best_test_auc_current)
+            self.accs.append(best_valid_acc)
+            self.aucs.append(best_valid_auc)
+            self.test_accs.append(acc_test)
+            self.test_aucs.append(auc_test)
+            self.aucs_current.append(best_valid_auc_current)
+            self.test_aucs_current.append(auc_current_test)
             self.consistency_m1.append(best_consistency_m1)
             self.consistency_m2.append(best_consistency_m2)
             # total_auc += best_test_auc
+        avg_acc = np.average(self.accs)
         avg_auc = np.average(self.aucs)
+        avg_test_acc = np.average(self.test_accs)
+        avg_test_auc = np.average(self.test_aucs)
         avg_auc_current = np.average(self.aucs_current)
+        avg_test_auc_current = np.average(self.test_aucs_current)
         avg_waviness_l1 = np.average(self.wavinesses_l1)
         avg_waviness_l2 = np.average(self.wavinesses_l2)
         avg_consistency_m1 = np.average(self.consistency_m1)
         avg_consistency_m2 = np.average(self.consistency_m2)
 
-        self._log("average AUC for {0} runs: {1}".format(num_runs, avg_auc))
-        self._log("average AUC Current for {0} runs: {1}".format(num_runs, avg_auc_current))
+        self._log("average validation ACC for {0} runs: {1}".format(num_runs, avg_acc))
+        self._log("average validation AUC for {0} runs: {1}".format(num_runs, avg_auc))
+        self._log("average validation AUC Current for {0} runs: {1}".format(num_runs, avg_auc_current))
         self._log("average waviness-l1 for {0} runs: {1}".format(num_runs, avg_waviness_l1))
         self._log("average waviness-l2 for {0} runs: {1}".format(num_runs, avg_waviness_l2))
         self._log("average consistency_m1 for {0} runs: {1}".format(num_runs, avg_consistency_m1))
         self._log("average consistency_m1 for {0} runs: {1}".format(num_runs, avg_consistency_m2))
+        
+        self._log("\n average test ACC for {0} runs: {1}".format(num_runs, avg_test_acc))
+        self._log("average test AUC for {0} runs: {1}".format(num_runs, avg_test_auc))
+        self._log("average test AUC Current for {0} runs: {1}\n".format(num_runs, avg_test_auc_current))
+        
         self._log("latex: \n" + self.auc_summary_in_latex())
-        return avg_auc
+        return avg_acc, avg_auc
 
     def save_model(self):
         save_dir = os.path.join(self.ckpt_save_dir, 'run_{}'.format(self.run_count), self.model_name)
@@ -351,6 +388,9 @@ class DKT(object):
         layer_structure_str = ", ".join([str(i) for i in self.network_config['hidden_layer_structure']])
 
         # experiment result
+        acc_mean = np.average(self.accs)
+        acc_std = np.std(self.accs)
+        
         auc_mean = np.average(self.aucs)
         auc_std = np.std(self.aucs)
 
@@ -380,6 +420,7 @@ class DKT(object):
             '$\lambda_o$',
             '$\lambda_{w_1}$',
             '$\lambda_{w_2}$',
+            'Avg. ACC(N)',
             'Avg. AUC(N)',
             'Avg. AUC(C)',
             'Avg. $w_1$',
@@ -397,6 +438,7 @@ class DKT(object):
             "{:.4f}".format(self.network_config['lambda_o']),
             "{:.4f}".format(self.network_config['lambda_w1']),
             "{:.4f}".format(self.network_config['lambda_w2']),
+            "{} $\pm$ {}".format(acc_mean, acc_std),
             "{} $\pm$ {}".format(auc_mean, auc_std),
             "{} $\pm$ {}".format(auc_current_mean, auc_current_std),
             "{} $\pm$ {}".format(waviness_l1_mean, waviness_l1_std),
@@ -447,11 +489,16 @@ class DKT(object):
 
         return sns.heatmap(df, cmap='RdBu')
 
-    def waviness(self, is_train=False):
-        if is_train:
+    def waviness(self, mode='valid'):
+        if mode == 'train':
             data = self.data_train
+            is_train=True
+        elif mode == 'valid':
+            data = self.data_valid
+            is_train=False
         else:
             data = self.data_test
+            is_train=False
         data.reset_cursor()
         model = self.model
         sess = self.sess
@@ -484,11 +531,16 @@ class DKT(object):
         return waviness_l1, waviness_l2
 
 
-    def waviness_np(self, is_train=False):
-        if is_train:
+    def waviness_np(self, mode='valid'):
+        if mode == 'train':
             data = self.data_train
+            is_train=True
+        elif mode == 'valid':
+            data = self.data_valid
+            is_train=False
         else:
             data = self.data_test
+            is_train=False
         data.reset_cursor()
         model = self.model
         sess = self.sess
@@ -527,9 +579,11 @@ class DKT(object):
 
         return waviness_l1, waviness_l2
 
-    def _reconstruction_accurarcy(self, is_train=False):
-        if is_train:
+    def _reconstruction_accurarcy(self, mode='valid'):
+        if mode == 'train':
             data = self.data_train
+        elif mode == 'valid':
+            data = self.data_valid
         else:
             data = self.data_test
         data.reset_cursor()
@@ -561,11 +615,16 @@ class DKT(object):
                 num_interactions += 1
         return (sign_diff_score, diff_score, num_interactions)
 
-    def consistency(self, is_train=False):
-        if is_train:
+    def consistency(self, mode='valid'):
+        if mode == 'train':
             data = self.data_train
+            is_train=True
+        elif mode == 'valid':
+            data = self.data_valid
+            is_train=False
         else:
             data = self.data_test
+            is_train=False
         data.reset_cursor()
         model = self.model
         sess = self.sess

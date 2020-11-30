@@ -38,51 +38,24 @@ num_epochs = 30
 batch_size = 64
 keep_prob = 0.5
 
-dataset = 'a2009u'
-if dataset == 'a2009u':
-    train_path = './data/assist2009_updated/assist2009_updated_train.csv'
-    test_path = './data/assist2009_updated/assist2009_updated_test.csv'
-    save_dir_prefix = './results/a2009u/'
-elif dataset == 'a2015':
-    train_path = './data/assist2015/assist2015_train.csv'
-    test_path = './data/assist2015/assist2015_test.csv'
-    save_dir_prefix = './results/a2015/'
-elif dataset == 'synthetic':
-    train_path = './data/synthetic/naive_c5_q50_s4000_v1_train.csv'
-    test_path = './data/synthetic/naive_c5_q50_s4000_v1_test.csv'
-    save_dir_prefix = './results/synthetic/'
-elif dataset == 'statics':
-    train_path = './data/STATICS/STATICS_train.csv'
-    test_path = './data/STATICS/STATICS_test.csv'
-    save_dir_prefix = './results/STATICS/'
-elif dataset =='assistment_challenge':
-    train_path = './data/assistment_challenge/assistment_challenge_train.csv'
-    test_path = './data/assistment_challenge/assistment_challenge_test.csv'
-    save_dir_prefix = './results/assistment_challenge/'
-elif dataset == 'toy':
-    train_path = './data/toy_data_train.csv'
-    test_path = './data/toy_data_test.csv'
-    save_dir_prefix = './results/toy/'
-elif dataset == 'a2009':
-    train_path = './data/skill_id_train.csv'
-    test_path = './data/skill_id_test.csv'
-    save_dir_prefix = './results/a2009/'
-elif dataset == 'assist_lsh':
-    train_path = './data/assist_train_lsh_1116.csv'
-    test_path = './data/assist_test_lsh_1116.csv'
-    save_dir_prefix = './results/assist_lsh/'
+train_path = './data/assistment_1127/assistment_1127_train.csv'
+valid_path = './data/assistment_1127/assistment_1127_valid.csv'
+test_path = './data/assistment_1127/assistment_1127_test.csv'
+save_dir_prefix = './results/assitment_1127/'
+
 
 def main():
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     sess = tf.Session(config=config)
 
-    data = DKTData(train_path, test_path, batch_size=batch_size)
+    data = DKTData(train_path, valid_path, test_path, batch_size=batch_size)
     data_train = data.train
+    data_valid = data.valid
     data_test = data.test
     num_problems = data.num_problems
 
-    dkt = DKT(sess, data_train, data_test, num_problems, network_config,
+    dkt = DKT(sess, data_train, data_valid, data_test, num_problems, network_config,
               save_dir_prefix=save_dir_prefix,
               num_runs=num_runs, num_epochs=num_epochs,
               keep_prob=keep_prob, logging=True, save=True)
@@ -90,6 +63,7 @@ def main():
     # run optimization of the created model
     dkt.model.build_graph()
     dkt.run_optimization()
+    
     # close the session
     sess.close()
 

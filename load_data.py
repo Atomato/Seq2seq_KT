@@ -160,16 +160,21 @@ def read_data_from_csv(filename):
 
 
 class DKTData:
-    def __init__(self, train_path, test_path, batch_size=32):
+    def __init__(self, train_path, valid_path, test_path, batch_size=32):
         self.students_train, num_problems_train, max_seq_length_train = read_data_from_csv(train_path)
+        self.students_valid, num_problems_valid, max_seq_length_valid = read_data_from_csv(valid_path)
         self.students_test, num_problems_test, max_seq_length_test = read_data_from_csv(test_path)
-        self.num_problems = max(num_problems_test, num_problems_train)
-        self.max_seq_length = max(max_seq_length_train, max_seq_length_test)
+        self.num_problems = max(num_problems_test, num_problems_train, num_problems_valid)
+        self.max_seq_length = max(max_seq_length_train, max_seq_length_test, max_seq_length_valid)
 
         problem_seqs = [student[1] for student in self.students_train]
         correct_seqs = [student[2] for student in self.students_train]
         self.train = BatchGenerator(problem_seqs, correct_seqs, self.num_problems, batch_size)
 
+        problem_seqs = [student[1] for student in self.students_valid]
+        correct_seqs = [student[2] for student in self.students_valid]
+        self.valid = BatchGenerator(problem_seqs, correct_seqs, self.num_problems, batch_size)
+        
         problem_seqs = [student[1] for student in self.students_test]
         correct_seqs = [student[2] for student in self.students_test]
         self.test = BatchGenerator(problem_seqs, correct_seqs, self.num_problems, batch_size)
