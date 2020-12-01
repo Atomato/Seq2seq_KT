@@ -121,7 +121,7 @@ def read_data_from_csv(filename):
     tuples = []
     for i in range(0, len(rows), 3):
         # numbers of problem a student answered
-        seq_length = int(rows[i][0])
+        seq_length = len(rows[i + 1])
 
         # only keep student with at least 3 records.
         if seq_length < 3:
@@ -153,7 +153,7 @@ def read_data_from_csv(filename):
 
     print("max_num_problems_answered:", max_seq_length)
     print("num_problems:", num_problems)
-    print("The number of students is {0}".format(len(tuples)))
+    print("The number of data is {0}".format(len(tuples)))
     print("Finish reading data.")
 
     return tuples, num_problems, max_seq_length

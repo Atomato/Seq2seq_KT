@@ -1,100 +1,152 @@
 # Skill Embedded DKT
 
- - DKT 모델의 단점을 보완한 [DKT+](https://github.com/ckyeungac/deep-knowledge-tracing-plus) 모델 기반 지식 추적 모델 구현.
+  - DKT 모델의 단점을 보완한 [DKT+](https://github.com/ckyeungac/deep-knowledge-tracing-plus) 모델 기반 지식 추적 모델 구현.
  
- - **Skill Embedded DKT+**
-    - Input과 LSTM input 사이 embedding layer 추가 (embedding 차원=200)
-    - main.py의 network_config['embedding'] = *True*/*False* 로 조절
+  - **Skill Embedded DKT+**
+
+    - Input과 LSTM input 사이 embedding layer 추가.
+      - network_config['emb_layer'] = *True*/*False*
+      - network_config['embedding_dims'] = 200
+
+    - Skill의 embedding과 correct 정보를 분리.
+      - network_config['skill_separate_emb'] = *True*/*False*
+
+    - Correct 정보의 효과를 위한 차원 확장.
+      - network_config['expand_correct_dim'] = *True*/*False*
  
  
 ### Dataset Description
 
-  - [Individual BKT](http://gitlab.tmaxwork.shop/hyperstudy/knowledgetracing/python_kt_unitknowledgetracing/-/tree/individual_bkt)의 individual model dataset을 활용.
-  - 이를 DKT+ dataset format으로 변환.
-    - 첫 번째 row = 문제 풀이 시퀀스 개수
-    - 두 번째 row = 스킬 id 시퀀스 (기존 데이터의 skill id를 0 ~ max_skill_num-1 로 맵핑)
-    - 세 번재 row = 정오답 시퀀스
+  - [Individual BKT](http://gitlab.tmaxwork.shop/hyperstudy/knowledgetracing/python_kt_unitknowledgetracing/-/tree/individual_bkt)의 [ASSISTment_skill_builder_only_*_1123.txt](http://gitlab.tmaxwork.shop/hyperstudy/knowledgetracing/python_kt_unitknowledgetracing/-/blob/individual_bkt/data/ASSISTment_skill_builder_only_train_1123.txt) 데이터 활용.
 
+  - ./data/ASSISTment_skill_builder_only_1127/assitment_1127_*.csv
 
-  ```
-  15
-  1,1,1,1,7,7,9,10,10,10,10,11,11,45,54
-  0,1,1,1,1,1,0,0,1,1,1,1,1,0,0
-  ```
+  - Data Format
+    - 첫 번째 row = user id (0 ~ num_user-1)
+    - 두 번째 row = skill id sequence (0 ~ num_skill-1)
+    - 세 번재 row = correct sequence (0/1)
+
+    ```
+    308
+    1,1,1,1,7,7,9,10,10,10,10,11,11,45,54
+    0,1,1,1,1,1,0,0,1,1,1,1,1,0,0
+    ```
+
+  - Data 통계
+    - 총 skill 개수 (*num_skill*) = 105
+    - 총 user 수 (*num_user*) = 4003
+    - train_data : \# = 3661, *max_length* = 511
+    - valid data : \# = 1978, *max_length* = 127
+    - test data : \# = 2895, *max_length* = 213
 
 
 ### How To Run
 
 ```
 pip install -r requirements.txt
-python main.py
+(main.py 내 파라미터 조절 후) python main.py
 ```
 
 
 ### Test Result
 
-#### 1. Assistment 2009
+#### 1. ASSISTment_skill_builder_only_1127
+
   - 5번의 모델 학습 반복 및 평균 성능 기록.
-  - ./results/a2009u/ 에 결과 저장.
+  - ./results/assistment_1127/logs/ 에 결과 저장.
 
-1. **model = DKT**
-    - $\lambda_0$ = 0.0, $\lambda_{w1}$ = 0.0, $\lambda_{w2}$ = 0.0
 
-    - embedding = *False*
+**1. DKT**
 
-      ```
-      The best testing result occured at: 6-th epoch, with testing AUC: 0.82165
-      *********************************
-      average AUC for 5 runs: 0.8220155373849579
-      average AUC Current for 5 runs: 0.870065672603247
-      average waviness-l1 for 5 runs: 0.07280272439391001
-      average waviness-l2 for 5 runs: 0.11449000715743937
-      average consistency_m1 for 5 runs: 0.2798314292562115
-      average consistency_m1 for 5 runs: 0.0033070810666559146
-      ```
+- $\lambda_0$ = 0, $\lambda_{w1}$ = 0, $\lambda_{w2}$ = 0
 
-    - embedding = *True*
+  ```
+  average validation ACC for 5 runs: 0.722472097284691
+  average validation AUC for 5 runs: 0.7312790003966417
+  average validation AUC Current for 5 runs: 0.880834532582383
+  ...
 
-      ```
-      The best testing result occured at: 11-th epoch, with testing AUC: 0.82561
-      *********************************
-      average AUC for 5 runs: 0.8259260836995208
-      average AUC Current for 5 runs: 0.8538206911834502
-      average waviness-l1 for 5 runs: 0.10955865416504809
-      average waviness-l2 for 5 runs: 0.17086800366663718
-      average consistency_m1 for 5 runs: 0.24320923543980189
-      average consistency_m1 for 5 runs: -0.0015450966547946347
-      ```
+  test ACC for 5 runs : 0.7251, 0.7228, 0.7289, 0.7246, 0.7232
+  test AUC for 5 runs : 0.7523, 0.7509, 0.7563, 0.7545, 0.7524
 
-2. **model = DKT+**
-    - $\lambda_0$ = 0.1, $\lambda_{w1}$ = 0.03, $\lambda_{w2}$ = 3.0
+  average test ACC for 5 runs: 0.7249339804439369
+  average test AUC for 5 runs: 0.7532964399989337
+  average test AUC Current for 5 runs: 0.8880471219012704
+  ```
 
-    - embedding = *False*
 
-      ```
-      The best testing result occured at: 15-th epoch, with testing AUC: 0.82504
-      *********************************
-      average AUC for 5 runs: 0.824335969028188
-      average AUC Current for 5 runs: 0.9552285615588921
-      average waviness-l1 for 5 runs: 0.02060184455219459
-      average waviness-l2 for 5 runs: 0.04679744589296681
-      average consistency_m1 for 5 runs: 0.40512902452664373
-      average consistency_m1 for 5 runs: 0.06847989052936485
-      ```
+**2. DKT+**
 
-    - embedding = *True*
+- $\lambda_0$ = 0.1, $\lambda_{w1}$ = 0.003, $\lambda_{w2}$ = 3.0
 
-        ```
-        The best testing result occured at: 15-th epoch, with testing AUC: 0.82623
-        *********************************
-        average AUC for 5 runs: 0.8258746705334745
-        average AUC Current for 5 runs: 0.9540060738507712
-        average waviness-l1 for 5 runs: 0.021970434304943567
-        average waviness-l2 for 5 runs: 0.04869209260507832
-        average consistency_m1 for 5 runs: 0.40452983941839105
-        average consistency_m1 for 5 runs: 0.06714509249541853
-        ```
+**(1) emb_layer = *False***
 
+  - 기존 DKT+ 모델과 동일.
+
+    ```
+    average validation ACC for 5 runs: 0.725144094619357
+    average validation AUC for 5 runs: 0.734958509238247
+    average validation AUC Current for 5 runs: 0.9364238904704576
+    ...
+
+    test ACC for 5 runs : 0.73044, 0.73135, 0.73068, 0.73101, 0.72991
+    test AUC for 5 runs : 0.7606, 0.76306, 0.76211, 0.76395, 0.76063
+
+    average test ACC for 5 runs: 0.7306794661337521
+    average test AUC for 5 runs: 0.7620699804997882
+    average test AUC Current for 5 runs: 0.9384023639959386
+    ```
+
+
+**(2)  emb_layer = *True***
+
+  - skill_separate_emb = *False*
+
+    ```
+    average validation ACC for 5 runs: 0.7271697484591038
+    average validation AUC for 5 runs: 0.7369011724812694
+    average validation AUC Current for 5 runs: 0.931571503793674
+    ...
+    
+    test ACC for 5 runs : 0.73143, 0.7323, 0.731, 0.73035, 0.73291
+    test AUC for 5 runs : 0.7612, 0.76448, 0.762, 0.76177, 0.76169
+
+    average test ACC for 5 runs: 0.7315966026693312
+    average test AUC for 5 runs: 0.7622270136916077
+    average test AUC Current for 5 runs: 0.9371024762776695
+    ```
+
+  - **skill_separate_emb = *True* & expand_correct_dim = *False***
+
+    ```
+    average validation ACC for 5 runs: 0.7258170914542729
+    average validation AUC for 5 runs: 0.7364152991930496
+    average validation AUC Current for 5 runs: 0.9143275528897513
+    ...
+    
+    test ACC for 5 runs : 0.7316, 0.73262, 0.73285, 0.73168, 0.73362
+    test AUC for 5 runs : 0.76479, 0.76267, 0.76594, 0.76365, 0.76206
+
+    average test ACC for 5 runs: 0.7324744843337377
+    average test AUC for 5 runs: 0.7638218787225003
+    average test AUC Current for 5 runs: 0.9199936315038842
+    ```
+
+  - skill_separate_emb = *True* & expand_correct_dim = *True*
+
+    ```
+    average validation ACC for 5 runs: 0.7229385307346327
+    average validation AUC for 5 runs: 0.7305807564287312
+    average validation AUC Current for 5 runs: 0.9280161092685832
+    ...
+
+    test ACC for 5 runs : 0.73057, 0.73125, 0.73041, 0.72877, 0.73066
+    test AUC for 5 runs : 0.75755, 0.7586, 0.75912, 0.75871, 0.75999
+
+    average test ACC for 5 runs: 0.7303297409178503
+    average test AUC for 5 runs: 0.7587946868933916
+    average test AUC Current for 5 runs: 0.9342358026920173
+    ```
 
 ### ToDo
 
@@ -117,6 +169,9 @@ python main.py
 
 
 ### Detail hyperparameter for the program
+
+- 기존 DKT+ repository
+
 ```
 usage: main_origin.py [-h]
                [-hl [HIDDEN_LAYER_STRUCTURE [HIDDEN_LAYER_STRUCTURE ...]]]

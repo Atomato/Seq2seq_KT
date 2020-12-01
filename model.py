@@ -27,9 +27,10 @@ class Model(object):
                  lambda_w1 = 0.0,
                  lambda_w2 = 0.0,
                  lambda_o = 0.0,
-                 embedding = False,
-                 separate_embedding = False,
-                 expand_dim = False,
+                 emb_layer = False,
+                 skill_separate_emb = False,
+                 expand_correct_dim = False,
+                 embedding_dims = 200,
                  **kwargs):
         # dataset-dependent attributes
         self.num_problems = num_problems
@@ -41,10 +42,10 @@ class Model(object):
         self.lambda_w1 = lambda_w1 # regularization parameter for waviness for l1-norm
         self.lambda_w2 = lambda_w2 # regularization parameter for waviness for l1-norm
         self.lambda_o = lambda_o # regularization parameter for objective function
-        self.embedding = embedding # embedding layer or not
-        self.separate_embedding = separate_embedding # skill-separated embedding or not
-        self.expand_dim = expand_dim
-        self.embedding_dims = 200
+        self.emb_layer = emb_layer # embedding layer or not
+        self.skill_separate_emb = skill_separate_emb # skill-separated embedding or not
+        self.expand_correct_dim = expand_correct_dim
+        self.embedding_dims = embedding_dims
 
     def _create_placeholder(self):
         print("Creating placeholder...")
@@ -74,6 +75,7 @@ class Model(object):
             self.embed_outputs = tf.reshape(self.embed_outputs_flat, shape=[-1, num_steps, self.embedding_dims])
         
         self.hidden_layer_input = self.embed_outputs
+        print(f"LSTM input shape: {np.shape(self.hidden_layer_input)}")
     
     def _separate_input_embedding(self):
         X = self.X
@@ -91,8 +93,8 @@ class Model(object):
             zero = tf.constant(0, dtype=tf.float32)
             X_equal_one = tf.reduce_any(tf.not_equal(X_corr, zero), 2)
             X_correct_expand = tf.expand_dims(tf.cast(X_equal_one, tf.float32), 2)
-            if self.expand_dim:
-                X_correct_expand = tf.tile(X_correct_expand, [1,1,self.num_problems])
+            if self.expand_correct_dim:
+                X_correct_expand = tf.tile(X_correct_expand, [1,1,self.embedding_dims])
             
             self.inputs_flat = tf.reshape(X_prob, shape=[-1, self.num_problems])
             self.embed_outputs_flat = tf.matmul(self.inputs_flat, W_emb) + b_emb
@@ -100,7 +102,6 @@ class Model(object):
             self.concatenated_embeds = tf.concat([self.skill_embeds, X_correct_expand], axis=2)
         
         self.hidden_layer_input = self.concatenated_embeds
-        print(f"LSTM input shape: {np.shape(self.hidden_layer_input)}")
 
     def _influence(self):
         print("Creating Loss...")
@@ -110,6 +111,7 @@ class Model(object):
         self.hidden_layers_outputs = []
         self.hidden_layers_state = []
         hidden_layer_input = self.hidden_layer_input
+        print(f"LSTM input shape: {np.shape(hidden_layer_input)}")
         for i, layer_state_size in enumerate(hidden_layer_structure):
             variable_scope_name = "hidden_layer_{}".format(i)
             with tf.variable_scope(variable_scope_name, reuse=tf.get_variable_scope().reuse):
@@ -208,8 +210,8 @@ class Model(object):
 
     def build_graph(self):
         self._create_placeholder()
-        if self.embedding:
-            if self.separate_embedding:
+        if self.emb_layer:
+            if self.skill_separate_emb:
                 self._separate_input_embedding()
             else:
                 self._entire_input_embedding()

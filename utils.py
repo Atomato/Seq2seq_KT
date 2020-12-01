@@ -51,19 +51,17 @@ class DKT(object):
         model_name = self.model_name = cell_type_str + '-' + layer_structure_str
         save_dir_name = ""
 
-        if network_config['embedding']:
-            save_dir_name = 'n{}.lo{}.lw1{}.lw2{}.emb{}.sep{}/'.format(layer_structure_str,
+        save_dir_name = 'n{}.lo{}.lw1{}.lw2{}.emb{}'.format(layer_structure_str,
                                                     network_config['lambda_o'],
                                                     network_config['lambda_w1'],
                                                     network_config['lambda_w2'],
-                                                    network_config['embedding'],
-                                                    network_config['separate_embedding'])
-        else:
-            save_dir_name = 'n{}.lo{}.lw1{}.lw2{}.emb{}/'.format(layer_structure_str,
-                                                        network_config['lambda_o'],
-                                                        network_config['lambda_w1'],
-                                                        network_config['lambda_w2'],
-                                                        network_config['embedding'])
+                                                    network_config['emb_layer'])
+        if network_config['emb_layer']:
+            save_dir_name += '.sep{}'.format(network_config['skill_separate_emb'])
+            if network_config['skill_separate_emb']:
+                save_dir_name += '.expand{}'.format(network_config['expand_correct_dim'])
+                
+        save_dir_name += "/"
 
         self.ckpt_save_dir = os.path.join(save_dir_prefix, 'checkpoints', save_dir_name)
         self.log_save_dir = os.path.join(save_dir_prefix, 'logs', save_dir_name)
@@ -274,9 +272,9 @@ class DKT(object):
                 self.data_train.shuffle()
                 
             self._log("The best validation result occured at: {0}-th epoch, with validation ACC: {1:.5} and AUC: {2:.5}".format(
-                best_epoch_idx, best_valid_acc, best_valid_auc))
+                best_epoch_idx + 1, best_valid_acc, best_valid_auc))
             self._log("The best testing result occured at: {0}-th epoch, with testing ACC: {1:.5} and AUC: {2:.5}".format(
-                best_epoch_idx, acc_test, auc_test))
+                best_epoch_idx + 1, acc_test, auc_test))
             
             self._log(SPLIT_MSG * 3)
             self.wavinesses_l1.append(best_waviness_l1)
@@ -309,6 +307,8 @@ class DKT(object):
         self._log("average consistency_m1 for {0} runs: {1}".format(num_runs, avg_consistency_m1))
         self._log("average consistency_m1 for {0} runs: {1}".format(num_runs, avg_consistency_m2))
         
+        self._log(f"\ntest ACC for {num_runs} runs : {self.test_accs}")
+        self._log(f"test AUC for {num_runs} runs : {self.test_aucs}")
         self._log("\naverage test ACC for {0} runs: {1}".format(num_runs, avg_test_acc))
         self._log("average test AUC for {0} runs: {1}".format(num_runs, avg_test_auc))
         self._log("average test AUC Current for {0} runs: {1}\n".format(num_runs, avg_test_auc_current))

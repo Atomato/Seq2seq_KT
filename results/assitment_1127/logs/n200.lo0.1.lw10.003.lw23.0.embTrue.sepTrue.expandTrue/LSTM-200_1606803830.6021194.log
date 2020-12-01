@@ -1,0 +1,730 @@
+Network Configuration:
+batch_size: 128
+hidden_layer_structure: [200]
+learning_rate: 0.01
+keep_prob: 0.5
+rnn_cell: <class 'tensorflow.python.ops.rnn_cell_impl.LSTMCell'>
+max_grad_norm: 5.0
+lambda_w1: 0.003
+lambda_w2: 3.0
+lambda_o: 0.1
+emb_layer: True
+skill_separate_emb: True
+expand_correct_dim: True
+embedding_dims: 200
+Num of problems: 105
+Num of run: 5
+Max num of run: 30
+Keep Prob: 0.5
+Epoch    1, Train ACC: 0.6552, Train AUC: 0.63042, Train Loss: 0.71851
+Epoch    1, Valid ACC: 0.70688, Valid AUC: 0.6959, Valid AUC Curr: 0.87329, Valid Loss: 0.66679*
+Epoch    1, Test ACC: 0.71453, Test AUC: 0.72681, Test AUC Curr: 0.87662, Test Loss: 0.64157
+w_l1: 0.03005059553184577, w_l2: 0.05997772665172031
+m1: 0.665567216391804, m2: 0.047424281528149766. Saving the model
+time used for this epoch: 7.755412340164185s
+***********
+Epoch    2, Train ACC: 0.71367, Train AUC: 0.69908, Train Loss: 0.64191
+Epoch    2, Valid ACC: 0.71834, Valid AUC: 0.71185, Valid AUC Curr: 0.90186, Valid Loss: 0.64498*
+Epoch    2, Test ACC: 0.72625, Test AUC: 0.74545, Test AUC Curr: 0.90671, Test Loss: 0.62176
+w_l1: 0.029943706624651657, w_l2: 0.05766299706092992
+m1: 0.7770114942528735, m2: 0.0495492862906433. Saving the model
+time used for this epoch: 10.152717113494873s
+***********
+Epoch    3, Train ACC: 0.71757, Train AUC: 0.71305, Train Loss: 0.62478
+Epoch    3, Valid ACC: 0.71811, Valid AUC: 0.71431, Valid AUC Curr: 0.90892, Valid Loss: 0.64134*
+Epoch    3, Test ACC: 0.72331, Test AUC: 0.74807, Test AUC Curr: 0.91212, Test Loss: 0.6147
+w_l1: 0.026311340394033645, w_l2: 0.05249869542481365
+m1: 0.7540229885057471, m2: 0.0518676424689756. Saving the model
+time used for this epoch: 10.15242624282837s
+***********
+Epoch    4, Train ACC: 0.71955, Train AUC: 0.71657, Train Loss: 0.61979
+Epoch    4, Valid ACC: 0.71794, Valid AUC: 0.71921, Valid AUC Curr: 0.92082, Valid Loss: 0.63661*
+Epoch    4, Test ACC: 0.72707, Test AUC: 0.75139, Test AUC Curr: 0.92634, Test Loss: 0.61067
+w_l1: 0.02573315978694848, w_l2: 0.051331275381399255
+m1: 0.7393303348325837, m2: 0.060068177430208335. Saving the model
+time used for this epoch: 10.15959906578064s
+***********
+Epoch    5, Train ACC: 0.72031, Train AUC: 0.72028, Train Loss: 0.61529
+Epoch    5, Valid ACC: 0.71864, Valid AUC: 0.71965, Valid AUC Curr: 0.9379, Valid Loss: 0.63469*
+Epoch    5, Test ACC: 0.72873, Test AUC: 0.75033, Test AUC Curr: 0.94303, Test Loss: 0.60994
+w_l1: 0.026770209258574384, w_l2: 0.05090270531732517
+m1: 0.7934699317008163, m2: 0.062451565410621. Saving the model
+time used for this epoch: 9.975926876068115s
+***********
+Epoch    6, Train ACC: 0.72147, Train AUC: 0.72201, Train Loss: 0.61316
+Epoch    6, Valid ACC: 0.72057, Valid AUC: 0.71927, Valid AUC Curr: 0.93739, Valid Loss: 0.63441
+time used for this epoch: 7.996386766433716s
+***********
+Epoch    7, Train ACC: 0.72216, Train AUC: 0.7234, Train Loss: 0.61121
+Epoch    7, Valid ACC: 0.71927, Valid AUC: 0.71999, Valid AUC Curr: 0.93039, Valid Loss: 0.63227*
+Epoch    7, Test ACC: 0.72734, Test AUC: 0.7521, Test AUC Curr: 0.93941, Test Loss: 0.60689
+w_l1: 0.02234055269872267, w_l2: 0.04389300850171876
+m1: 0.7451940696318508, m2: 0.06253736854175439. Saving the model
+time used for this epoch: 10.236022710800171s
+***********
+Epoch    8, Train ACC: 0.72331, Train AUC: 0.72548, Train Loss: 0.60929
+Epoch    8, Valid ACC: 0.72061, Valid AUC: 0.72389, Valid AUC Curr: 0.93303, Valid Loss: 0.63186*
+Epoch    8, Test ACC: 0.72825, Test AUC: 0.75386, Test AUC Curr: 0.93525, Test Loss: 0.60481
+w_l1: 0.022026787380106067, w_l2: 0.04382458374093381
+m1: 0.767816091954023, m2: 0.059332160247319465. Saving the model
+time used for this epoch: 10.467845678329468s
+***********
+Epoch    9, Train ACC: 0.72359, Train AUC: 0.7274, Train Loss: 0.60677
+Epoch    9, Valid ACC: 0.72074, Valid AUC: 0.72211, Valid AUC Curr: 0.93631, Valid Loss: 0.62905
+time used for this epoch: 7.976309299468994s
+***********
+Epoch   10, Train ACC: 0.72457, Train AUC: 0.73055, Train Loss: 0.60473
+Epoch   10, Valid ACC: 0.72154, Valid AUC: 0.72767, Valid AUC Curr: 0.93939, Valid Loss: 0.62665*
+Epoch   10, Test ACC: 0.72866, Test AUC: 0.75801, Test AUC Curr: 0.9467, Test Loss: 0.60007
+w_l1: 0.022264328983044448, w_l2: 0.04396942589649797
+m1: 0.7731800766283525, m2: 0.06878298938264454. Saving the model
+time used for this epoch: 10.28801703453064s
+***********
+Epoch   11, Train ACC: 0.72558, Train AUC: 0.73242, Train Loss: 0.6032
+Epoch   11, Valid ACC: 0.72207, Valid AUC: 0.72619, Valid AUC Curr: 0.9402, Valid Loss: 0.62804
+time used for this epoch: 8.276901245117188s
+***********
+Epoch   12, Train ACC: 0.72628, Train AUC: 0.7353, Train Loss: 0.60058
+Epoch   12, Valid ACC: 0.72131, Valid AUC: 0.72543, Valid AUC Curr: 0.94083, Valid Loss: 0.62574
+time used for this epoch: 7.776453495025635s
+***********
+Epoch   13, Train ACC: 0.72693, Train AUC: 0.73683, Train Loss: 0.59844
+Epoch   13, Valid ACC: 0.72034, Valid AUC: 0.72803, Valid AUC Curr: 0.93297, Valid Loss: 0.62656*
+Epoch   13, Test ACC: 0.7288, Test AUC: 0.75651, Test AUC Curr: 0.93554, Test Loss: 0.60174
+w_l1: 0.018799309358962558, w_l2: 0.036931728477520034
+m1: 0.7931367649508579, m2: 0.06386297282607838. Saving the model
+time used for this epoch: 10.092063188552856s
+***********
+Epoch   14, Train ACC: 0.72681, Train AUC: 0.73821, Train Loss: 0.59865
+Epoch   14, Valid ACC: 0.72157, Valid AUC: 0.72693, Valid AUC Curr: 0.92448, Valid Loss: 0.62671
+time used for this epoch: 7.961791753768921s
+***********
+Epoch   15, Train ACC: 0.72784, Train AUC: 0.739, Train Loss: 0.59663
+Epoch   15, Valid ACC: 0.72221, Valid AUC: 0.7296, Valid AUC Curr: 0.9301, Valid Loss: 0.62449*
+Epoch   15, Test ACC: 0.73057, Test AUC: 0.75755, Test AUC Curr: 0.93839, Test Loss: 0.59956
+w_l1: 0.01904252173658929, w_l2: 0.03780169267359592
+m1: 0.7578210894552724, m2: 0.06470825097748742. Saving the model
+time used for this epoch: 10.259117603302002s
+***********
+Epoch   16, Train ACC: 0.72855, Train AUC: 0.74013, Train Loss: 0.59521
+Epoch   16, Valid ACC: 0.72171, Valid AUC: 0.72887, Valid AUC Curr: 0.93945, Valid Loss: 0.62395
+time used for this epoch: 7.988780975341797s
+***********
+Epoch   17, Train ACC: 0.72982, Train AUC: 0.74208, Train Loss: 0.59392
+Epoch   17, Valid ACC: 0.72121, Valid AUC: 0.72737, Valid AUC Curr: 0.93246, Valid Loss: 0.62547
+time used for this epoch: 7.917814493179321s
+***********
+Epoch   18, Train ACC: 0.73023, Train AUC: 0.74355, Train Loss: 0.59402
+Epoch   18, Valid ACC: 0.72014, Valid AUC: 0.7255, Valid AUC Curr: 0.94148, Valid Loss: 0.62618
+time used for this epoch: 7.962773561477661s
+***********
+Epoch   19, Train ACC: 0.7297, Train AUC: 0.74178, Train Loss: 0.5946
+Epoch   19, Valid ACC: 0.72037, Valid AUC: 0.7273, Valid AUC Curr: 0.93739, Valid Loss: 0.62741
+time used for this epoch: 7.521896123886108s
+***********
+Epoch   20, Train ACC: 0.72992, Train AUC: 0.74306, Train Loss: 0.59351
+Epoch   20, Valid ACC: 0.72097, Valid AUC: 0.7274, Valid AUC Curr: 0.93525, Valid Loss: 0.62669
+time used for this epoch: 7.933621168136597s
+***********
+Epoch   21, Train ACC: 0.73103, Train AUC: 0.74497, Train Loss: 0.59093
+Epoch   21, Valid ACC: 0.72031, Valid AUC: 0.72729, Valid AUC Curr: 0.93895, Valid Loss: 0.62599
+time used for this epoch: 7.734827995300293s
+***********
+Epoch   22, Train ACC: 0.73143, Train AUC: 0.74572, Train Loss: 0.59045
+Epoch   22, Valid ACC: 0.71941, Valid AUC: 0.7273, Valid AUC Curr: 0.93522, Valid Loss: 0.6266
+time used for this epoch: 7.9147865772247314s
+***********
+Epoch   23, Train ACC: 0.73219, Train AUC: 0.74612, Train Loss: 0.59041
+Epoch   23, Valid ACC: 0.71891, Valid AUC: 0.72749, Valid AUC Curr: 0.93363, Valid Loss: 0.62657
+time used for this epoch: 7.698266267776489s
+***********
+Epoch   24, Train ACC: 0.73201, Train AUC: 0.7479, Train Loss: 0.58891
+Epoch   24, Valid ACC: 0.72157, Valid AUC: 0.72685, Valid AUC Curr: 0.93866, Valid Loss: 0.62669
+time used for this epoch: 7.667120695114136s
+***********
+Epoch   25, Train ACC: 0.73392, Train AUC: 0.74841, Train Loss: 0.58831
+Epoch   25, Valid ACC: 0.72067, Valid AUC: 0.72644, Valid AUC Curr: 0.93409, Valid Loss: 0.62757
+time used for this epoch: 7.883840322494507s
+***********
+No improvement shown in 10 epochs. Quit Training.
+The best validation result occured at: 14-th epoch, with validation ACC: 0.72221 and AUC: 0.7296
+The best testing result occured at: 14-th epoch, with testing ACC: 0.73057 and AUC: 0.75755
+*********************************
+Epoch    1, Train ACC: 0.69456, Train AUC: 0.67805, Train Loss: 0.67291
+Epoch    1, Valid ACC: 0.71824, Valid AUC: 0.71591, Valid AUC Curr: 0.90515, Valid Loss: 0.64258*
+Epoch    1, Test ACC: 0.72684, Test AUC: 0.74659, Test AUC Curr: 0.90756, Test Loss: 0.61834
+w_l1: 0.030432583216865493, w_l2: 0.05539690461370233
+m1: 0.7638180909545227, m2: 0.051238543406816474. Saving the model
+time used for this epoch: 10.261675834655762s
+***********
+Epoch    2, Train ACC: 0.71867, Train AUC: 0.71668, Train Loss: 0.62219
+Epoch    2, Valid ACC: 0.71991, Valid AUC: 0.72268, Valid AUC Curr: 0.91286, Valid Loss: 0.63635*
+Epoch    2, Test ACC: 0.72798, Test AUC: 0.75334, Test AUC Curr: 0.91984, Test Loss: 0.60911
+w_l1: 0.026284039368929184, w_l2: 0.05029214406972939
+m1: 0.8063968015992004, m2: 0.058854499796361065. Saving the model
+time used for this epoch: 10.201297760009766s
+***********
+Epoch    3, Train ACC: 0.72165, Train AUC: 0.72538, Train Loss: 0.61387
+Epoch    3, Valid ACC: 0.72047, Valid AUC: 0.72283, Valid AUC Curr: 0.92562, Valid Loss: 0.63283*
+Epoch    3, Test ACC: 0.72969, Test AUC: 0.75511, Test AUC Curr: 0.93112, Test Loss: 0.6074
+w_l1: 0.023464374043236296, w_l2: 0.0460744150632437
+m1: 0.8005330667999334, m2: 0.05818031539067852. Saving the model
+time used for this epoch: 10.523191452026367s
+***********
+Epoch    4, Train ACC: 0.72189, Train AUC: 0.72936, Train Loss: 0.60938
+Epoch    4, Valid ACC: 0.72197, Valid AUC: 0.72774, Valid AUC Curr: 0.92587, Valid Loss: 0.62903*
+Epoch    4, Test ACC: 0.72903, Test AUC: 0.7578, Test AUC Curr: 0.92659, Test Loss: 0.60381
+w_l1: 0.020520288573944032, w_l2: 0.039991051819433264
+m1: 0.8353156754955855, m2: 0.05542363427429225. Saving the model
+time used for this epoch: 10.302755117416382s
+***********
+Epoch    5, Train ACC: 0.72391, Train AUC: 0.73409, Train Loss: 0.60486
+Epoch    5, Valid ACC: 0.72171, Valid AUC: 0.72716, Valid AUC Curr: 0.92493, Valid Loss: 0.62745
+time used for this epoch: 7.987680196762085s
+***********
+Epoch    6, Train ACC: 0.72478, Train AUC: 0.73554, Train Loss: 0.60189
+Epoch    6, Valid ACC: 0.72121, Valid AUC: 0.72816, Valid AUC Curr: 0.92647, Valid Loss: 0.62732*
+Epoch    6, Test ACC: 0.73003, Test AUC: 0.75866, Test AUC Curr: 0.93059, Test Loss: 0.60011
+w_l1: 0.019492655298520806, w_l2: 0.037453839690431534
+m1: 0.821056138597368, m2: 0.06062252656253361. Saving the model
+time used for this epoch: 10.271970748901367s
+***********
+Epoch    7, Train ACC: 0.72635, Train AUC: 0.74015, Train Loss: 0.59849
+Epoch    7, Valid ACC: 0.72261, Valid AUC: 0.72927, Valid AUC Curr: 0.94932, Valid Loss: 0.62356*
+Epoch    7, Test ACC: 0.7318, Test AUC: 0.7593, Test AUC Curr: 0.9519, Test Loss: 0.5947
+w_l1: 0.023429301554654502, w_l2: 0.044332686319008656
+m1: 0.8053639846743295, m2: 0.07306591729293282. Saving the model
+time used for this epoch: 10.370758056640625s
+***********
+Epoch    8, Train ACC: 0.72742, Train AUC: 0.73931, Train Loss: 0.59949
+Epoch    8, Valid ACC: 0.72211, Valid AUC: 0.72967, Valid AUC Curr: 0.92857, Valid Loss: 0.62431*
+Epoch    8, Test ACC: 0.73146, Test AUC: 0.75938, Test AUC Curr: 0.93665, Test Loss: 0.5973
+w_l1: 0.019514032412241544, w_l2: 0.03787623902358533
+m1: 0.7789105447276362, m2: 0.0655848817409882. Saving the model
+time used for this epoch: 10.33821415901184s
+***********
+Epoch    9, Train ACC: 0.72621, Train AUC: 0.73999, Train Loss: 0.59824
+Epoch    9, Valid ACC: 0.72231, Valid AUC: 0.72907, Valid AUC Curr: 0.93001, Valid Loss: 0.62463
+time used for this epoch: 7.6763293743133545s
+***********
+Epoch   10, Train ACC: 0.72705, Train AUC: 0.74181, Train Loss: 0.59697
+Epoch   10, Valid ACC: 0.72144, Valid AUC: 0.72925, Valid AUC Curr: 0.93053, Valid Loss: 0.62353
+time used for this epoch: 7.996960163116455s
+***********
+Epoch   11, Train ACC: 0.72788, Train AUC: 0.7431, Train Loss: 0.59543
+Epoch   11, Valid ACC: 0.72181, Valid AUC: 0.72714, Valid AUC Curr: 0.94421, Valid Loss: 0.62491
+time used for this epoch: 8.167394638061523s
+***********
+Epoch   12, Train ACC: 0.72826, Train AUC: 0.74424, Train Loss: 0.59431
+Epoch   12, Valid ACC: 0.72224, Valid AUC: 0.7299, Valid AUC Curr: 0.9263, Valid Loss: 0.62423*
+Epoch   12, Test ACC: 0.73125, Test AUC: 0.7586, Test AUC Curr: 0.93186, Test Loss: 0.59684
+w_l1: 0.017405220355820022, w_l2: 0.03469197738287992
+m1: 0.7437947692820257, m2: 0.06419897417058631. Saving the model
+time used for this epoch: 10.244030475616455s
+***********
+Epoch   13, Train ACC: 0.72979, Train AUC: 0.74559, Train Loss: 0.59319
+Epoch   13, Valid ACC: 0.72191, Valid AUC: 0.72719, Valid AUC Curr: 0.95217, Valid Loss: 0.62385
+time used for this epoch: 7.874274492263794s
+***********
+Epoch   14, Train ACC: 0.72862, Train AUC: 0.74446, Train Loss: 0.59302
+Epoch   14, Valid ACC: 0.72201, Valid AUC: 0.72577, Valid AUC Curr: 0.94359, Valid Loss: 0.62528
+time used for this epoch: 7.85726261138916s
+***********
+Epoch   15, Train ACC: 0.72927, Train AUC: 0.74499, Train Loss: 0.59163
+Epoch   15, Valid ACC: 0.72174, Valid AUC: 0.72513, Valid AUC Curr: 0.93764, Valid Loss: 0.62692
+time used for this epoch: 7.882659435272217s
+***********
+Epoch   16, Train ACC: 0.73075, Train AUC: 0.7465, Train Loss: 0.59163
+Epoch   16, Valid ACC: 0.72177, Valid AUC: 0.72958, Valid AUC Curr: 0.92834, Valid Loss: 0.62403
+time used for this epoch: 7.821415901184082s
+***********
+Epoch   17, Train ACC: 0.73086, Train AUC: 0.75018, Train Loss: 0.58791
+Epoch   17, Valid ACC: 0.72091, Valid AUC: 0.72845, Valid AUC Curr: 0.93861, Valid Loss: 0.62419
+time used for this epoch: 7.950157165527344s
+***********
+Epoch   18, Train ACC: 0.73213, Train AUC: 0.7506, Train Loss: 0.58813
+Epoch   18, Valid ACC: 0.72127, Valid AUC: 0.72936, Valid AUC Curr: 0.92461, Valid Loss: 0.6251
+time used for this epoch: 7.706530809402466s
+***********
+Epoch   19, Train ACC: 0.73125, Train AUC: 0.75038, Train Loss: 0.58803
+Epoch   19, Valid ACC: 0.72131, Valid AUC: 0.72759, Valid AUC Curr: 0.92847, Valid Loss: 0.62737
+time used for this epoch: 7.902273416519165s
+***********
+Epoch   20, Train ACC: 0.73193, Train AUC: 0.75112, Train Loss: 0.58782
+Epoch   20, Valid ACC: 0.72247, Valid AUC: 0.72852, Valid AUC Curr: 0.93307, Valid Loss: 0.62576
+time used for this epoch: 8.014502763748169s
+***********
+Epoch   21, Train ACC: 0.7342, Train AUC: 0.75204, Train Loss: 0.58701
+Epoch   21, Valid ACC: 0.72117, Valid AUC: 0.72696, Valid AUC Curr: 0.93465, Valid Loss: 0.62675
+time used for this epoch: 7.737151622772217s
+***********
+Epoch   22, Train ACC: 0.7333, Train AUC: 0.75333, Train Loss: 0.58555
+Epoch   22, Valid ACC: 0.72184, Valid AUC: 0.72723, Valid AUC Curr: 0.93438, Valid Loss: 0.62792
+time used for this epoch: 7.9407477378845215s
+***********
+No improvement shown in 10 epochs. Quit Training.
+The best validation result occured at: 11-th epoch, with validation ACC: 0.72224 and AUC: 0.7299
+The best testing result occured at: 11-th epoch, with testing ACC: 0.73125 and AUC: 0.7586
+*********************************
+Epoch    1, Train ACC: 0.69584, Train AUC: 0.68149, Train Loss: 0.67619
+Epoch    1, Valid ACC: 0.71934, Valid AUC: 0.71178, Valid AUC Curr: 0.90289, Valid Loss: 0.64509*
+Epoch    1, Test ACC: 0.72573, Test AUC: 0.7467, Test AUC Curr: 0.9077, Test Loss: 0.61894
+w_l1: 0.030986201873818404, w_l2: 0.05821636534104793
+m1: 0.7824421122771947, m2: 0.05087885145602496. Saving the model
+time used for this epoch: 10.099820137023926s
+***********
+Epoch    2, Train ACC: 0.71879, Train AUC: 0.71718, Train Loss: 0.62244
+Epoch    2, Valid ACC: 0.71967, Valid AUC: 0.72117, Valid AUC Curr: 0.91213, Valid Loss: 0.63551*
+Epoch    2, Test ACC: 0.72918, Test AUC: 0.75197, Test AUC Curr: 0.91522, Test Loss: 0.61091
+w_l1: 0.024511938166932087, w_l2: 0.04825068597081545
+m1: 0.7982008995502249, m2: 0.05325724358124156. Saving the model
+time used for this epoch: 10.158436059951782s
+***********
+Epoch    3, Train ACC: 0.72023, Train AUC: 0.72471, Train Loss: 0.61295
+Epoch    3, Valid ACC: 0.71994, Valid AUC: 0.72635, Valid AUC Curr: 0.9151, Valid Loss: 0.63063*
+Epoch    3, Test ACC: 0.72816, Test AUC: 0.75714, Test AUC Curr: 0.9194, Test Loss: 0.60703
+w_l1: 0.02080604305928494, w_l2: 0.0414970938442292
+m1: 0.7974012993503249, m2: 0.05414249743597916. Saving the model
+time used for this epoch: 10.025079250335693s
+***********
+Epoch    4, Train ACC: 0.72251, Train AUC: 0.72988, Train Loss: 0.60951
+Epoch    4, Valid ACC: 0.72121, Valid AUC: 0.7266, Valid AUC Curr: 0.92249, Valid Loss: 0.62865*
+Epoch    4, Test ACC: 0.73096, Test AUC: 0.75733, Test AUC Curr: 0.93187, Test Loss: 0.60311
+w_l1: 0.020243710740942875, w_l2: 0.040055260995492066
+m1: 0.7986673330001666, m2: 0.05860118850477334. Saving the model
+time used for this epoch: 10.285099983215332s
+***********
+Epoch    5, Train ACC: 0.72303, Train AUC: 0.7307, Train Loss: 0.60537
+Epoch    5, Valid ACC: 0.72237, Valid AUC: 0.72473, Valid AUC Curr: 0.94789, Valid Loss: 0.62944
+time used for this epoch: 7.886188268661499s
+***********
+Epoch    6, Train ACC: 0.72447, Train AUC: 0.73401, Train Loss: 0.60372
+Epoch    6, Valid ACC: 0.72114, Valid AUC: 0.72776, Valid AUC Curr: 0.93401, Valid Loss: 0.62549*
+Epoch    6, Test ACC: 0.7308, Test AUC: 0.75898, Test AUC Curr: 0.94056, Test Loss: 0.59899
+w_l1: 0.01899789652730355, w_l2: 0.03759967342301316
+m1: 0.7844744294519407, m2: 0.06237564754152465. Saving the model
+time used for this epoch: 10.261962890625s
+***********
+Epoch    7, Train ACC: 0.7254, Train AUC: 0.73743, Train Loss: 0.60035
+Epoch    7, Valid ACC: 0.72087, Valid AUC: 0.72793, Valid AUC Curr: 0.92634, Valid Loss: 0.62511*
+Epoch    7, Test ACC: 0.7295, Test AUC: 0.75708, Test AUC Curr: 0.93359, Test Loss: 0.59888
+w_l1: 0.019723776315132197, w_l2: 0.038903831890576356
+m1: 0.765583874729302, m2: 0.06592256238455378. Saving the model
+time used for this epoch: 10.430643320083618s
+***********
+Epoch    8, Train ACC: 0.72647, Train AUC: 0.7389, Train Loss: 0.59864
+Epoch    8, Valid ACC: 0.72174, Valid AUC: 0.72842, Valid AUC Curr: 0.93629, Valid Loss: 0.62549*
+Epoch    8, Test ACC: 0.73164, Test AUC: 0.75917, Test AUC Curr: 0.93731, Test Loss: 0.59702
+w_l1: 0.020327137405843358, w_l2: 0.03949293156141642
+m1: 0.8024987506246877, m2: 0.06683901642513895. Saving the model
+time used for this epoch: 10.287055969238281s
+***********
+Epoch    9, Train ACC: 0.72734, Train AUC: 0.73952, Train Loss: 0.59737
+Epoch    9, Valid ACC: 0.72321, Valid AUC: 0.72835, Valid AUC Curr: 0.91504, Valid Loss: 0.62664
+time used for this epoch: 8.202009916305542s
+***********
+Epoch   10, Train ACC: 0.7272, Train AUC: 0.74078, Train Loss: 0.59691
+Epoch   10, Valid ACC: 0.72164, Valid AUC: 0.72872, Valid AUC Curr: 0.94017, Valid Loss: 0.62392*
+Epoch   10, Test ACC: 0.73107, Test AUC: 0.75969, Test AUC Curr: 0.94475, Test Loss: 0.59477
+w_l1: 0.018750170375423463, w_l2: 0.036721421310967624
+m1: 0.781375978677328, m2: 0.06806675262119935. Saving the model
+time used for this epoch: 10.398066997528076s
+***********
+Epoch   11, Train ACC: 0.72728, Train AUC: 0.74213, Train Loss: 0.59674
+Epoch   11, Valid ACC: 0.72037, Valid AUC: 0.72814, Valid AUC Curr: 0.94008, Valid Loss: 0.62367
+time used for this epoch: 8.014134883880615s
+***********
+Epoch   12, Train ACC: 0.7283, Train AUC: 0.74234, Train Loss: 0.59477
+Epoch   12, Valid ACC: 0.71974, Valid AUC: 0.72509, Valid AUC Curr: 0.9321, Valid Loss: 0.62733
+time used for this epoch: 8.088777303695679s
+***********
+Epoch   13, Train ACC: 0.72804, Train AUC: 0.74316, Train Loss: 0.59504
+Epoch   13, Valid ACC: 0.72127, Valid AUC: 0.72778, Valid AUC Curr: 0.93777, Valid Loss: 0.62517
+time used for this epoch: 7.9538490772247314s
+***********
+Epoch   14, Train ACC: 0.72824, Train AUC: 0.7425, Train Loss: 0.59361
+Epoch   14, Valid ACC: 0.72137, Valid AUC: 0.72873, Valid AUC Curr: 0.93533, Valid Loss: 0.62559*
+Epoch   14, Test ACC: 0.73003, Test AUC: 0.75802, Test AUC Curr: 0.94143, Test Loss: 0.59686
+w_l1: 0.018437798739455852, w_l2: 0.03641618050746141
+m1: 0.6786939863401632, m2: 0.06926797244442755. Saving the model
+time used for this epoch: 10.206290245056152s
+***********
+Epoch   15, Train ACC: 0.72928, Train AUC: 0.74499, Train Loss: 0.59212
+Epoch   15, Valid ACC: 0.72124, Valid AUC: 0.72829, Valid AUC Curr: 0.93845, Valid Loss: 0.62531
+time used for this epoch: 7.90210747718811s
+***********
+Epoch   16, Train ACC: 0.73053, Train AUC: 0.74616, Train Loss: 0.59133
+Epoch   16, Valid ACC: 0.72211, Valid AUC: 0.72745, Valid AUC Curr: 0.93739, Valid Loss: 0.62561
+time used for this epoch: 8.081506967544556s
+***********
+Epoch   17, Train ACC: 0.7306, Train AUC: 0.74783, Train Loss: 0.58939
+Epoch   17, Valid ACC: 0.72061, Valid AUC: 0.72617, Valid AUC Curr: 0.94671, Valid Loss: 0.62605
+time used for this epoch: 7.854827880859375s
+***********
+Epoch   18, Train ACC: 0.73097, Train AUC: 0.74703, Train Loss: 0.59089
+Epoch   18, Valid ACC: 0.71944, Valid AUC: 0.72583, Valid AUC Curr: 0.93796, Valid Loss: 0.62736
+time used for this epoch: 7.7511420249938965s
+***********
+Epoch   19, Train ACC: 0.73178, Train AUC: 0.74837, Train Loss: 0.58845
+Epoch   19, Valid ACC: 0.72231, Valid AUC: 0.72914, Valid AUC Curr: 0.93166, Valid Loss: 0.62536*
+Epoch   19, Test ACC: 0.73041, Test AUC: 0.75912, Test AUC Curr: 0.93628, Test Loss: 0.59781
+w_l1: 0.01750573798051359, w_l2: 0.034889269414063326
+m1: 0.6453773113443279, m2: 0.06781641545741335. Saving the model
+time used for this epoch: 10.47226071357727s
+***********
+Epoch   20, Train ACC: 0.73183, Train AUC: 0.74941, Train Loss: 0.58819
+Epoch   20, Valid ACC: 0.72174, Valid AUC: 0.72847, Valid AUC Curr: 0.93126, Valid Loss: 0.62826
+time used for this epoch: 7.811902761459351s
+***********
+Epoch   21, Train ACC: 0.7322, Train AUC: 0.74965, Train Loss: 0.58862
+Epoch   21, Valid ACC: 0.72274, Valid AUC: 0.72766, Valid AUC Curr: 0.92916, Valid Loss: 0.62672
+time used for this epoch: 7.968818426132202s
+***********
+Epoch   22, Train ACC: 0.73367, Train AUC: 0.75007, Train Loss: 0.58714
+Epoch   22, Valid ACC: 0.71951, Valid AUC: 0.72834, Valid AUC Curr: 0.93533, Valid Loss: 0.62908
+time used for this epoch: 8.001837491989136s
+***********
+Epoch   23, Train ACC: 0.73367, Train AUC: 0.75116, Train Loss: 0.58555
+Epoch   23, Valid ACC: 0.72084, Valid AUC: 0.72556, Valid AUC Curr: 0.94162, Valid Loss: 0.62829
+time used for this epoch: 7.783093690872192s
+***********
+Epoch   24, Train ACC: 0.73384, Train AUC: 0.75335, Train Loss: 0.58448
+Epoch   24, Valid ACC: 0.72217, Valid AUC: 0.72508, Valid AUC Curr: 0.93787, Valid Loss: 0.62964
+time used for this epoch: 8.086082458496094s
+***********
+Epoch   25, Train ACC: 0.73468, Train AUC: 0.75326, Train Loss: 0.58507
+Epoch   25, Valid ACC: 0.72254, Valid AUC: 0.72784, Valid AUC Curr: 0.93397, Valid Loss: 0.62821
+time used for this epoch: 7.94305682182312s
+***********
+Epoch   26, Train ACC: 0.73566, Train AUC: 0.75386, Train Loss: 0.58468
+Epoch   26, Valid ACC: 0.72081, Valid AUC: 0.72344, Valid AUC Curr: 0.92813, Valid Loss: 0.63178
+time used for this epoch: 7.950798273086548s
+***********
+Epoch   27, Train ACC: 0.7359, Train AUC: 0.75431, Train Loss: 0.58377
+Epoch   27, Valid ACC: 0.72124, Valid AUC: 0.72619, Valid AUC Curr: 0.93757, Valid Loss: 0.63115
+time used for this epoch: 7.765953779220581s
+***********
+Epoch   28, Train ACC: 0.73706, Train AUC: 0.75662, Train Loss: 0.58279
+Epoch   28, Valid ACC: 0.72224, Valid AUC: 0.72362, Valid AUC Curr: 0.92397, Valid Loss: 0.63106
+time used for this epoch: 7.72494912147522s
+***********
+Epoch   29, Train ACC: 0.73728, Train AUC: 0.75674, Train Loss: 0.58258
+Epoch   29, Valid ACC: 0.72151, Valid AUC: 0.72429, Valid AUC Curr: 0.93057, Valid Loss: 0.63187
+time used for this epoch: 7.790240526199341s
+***********
+No improvement shown in 10 epochs. Quit Training.
+The best validation result occured at: 18-th epoch, with validation ACC: 0.72231 and AUC: 0.72914
+The best testing result occured at: 18-th epoch, with testing ACC: 0.73041 and AUC: 0.75912
+*********************************
+Epoch    1, Train ACC: 0.69803, Train AUC: 0.68638, Train Loss: 0.66261
+Epoch    1, Valid ACC: 0.71701, Valid AUC: 0.71688, Valid AUC Curr: 0.90486, Valid Loss: 0.6428*
+Epoch    1, Test ACC: 0.72566, Test AUC: 0.74925, Test AUC Curr: 0.90758, Test Loss: 0.6193
+w_l1: 0.02849265196851533, w_l2: 0.05184973012252503
+m1: 0.7847409628519074, m2: 0.04917737160665521. Saving the model
+time used for this epoch: 10.20382809638977s
+***********
+Epoch    2, Train ACC: 0.71921, Train AUC: 0.72199, Train Loss: 0.6187
+Epoch    2, Valid ACC: 0.71874, Valid AUC: 0.72093, Valid AUC Curr: 0.93279, Valid Loss: 0.63534*
+Epoch    2, Test ACC: 0.72814, Test AUC: 0.7531, Test AUC Curr: 0.93719, Test Loss: 0.60867
+w_l1: 0.028064471129064274, w_l2: 0.05260104721691031
+m1: 0.8214226220223222, m2: 0.06372431406632435. Saving the model
+time used for this epoch: 10.40852975845337s
+***********
+Epoch    3, Train ACC: 0.72166, Train AUC: 0.72723, Train Loss: 0.6113
+Epoch    3, Valid ACC: 0.71941, Valid AUC: 0.72329, Valid AUC Curr: 0.93899, Valid Loss: 0.63167*
+Epoch    3, Test ACC: 0.72866, Test AUC: 0.75551, Test AUC Curr: 0.93944, Test Loss: 0.60285
+w_l1: 0.026092393428168277, w_l2: 0.050124419209488645
+m1: 0.8114942528735632, m2: 0.06941853885687968. Saving the model
+time used for this epoch: 10.308138847351074s
+***********
+Epoch    4, Train ACC: 0.72317, Train AUC: 0.73361, Train Loss: 0.60637
+Epoch    4, Valid ACC: 0.72261, Valid AUC: 0.72958, Valid AUC Curr: 0.91873, Valid Loss: 0.6261*
+Epoch    4, Test ACC: 0.73073, Test AUC: 0.75939, Test AUC Curr: 0.92538, Test Loss: 0.59962
+w_l1: 0.02153952147891879, w_l2: 0.04281323130491939
+m1: 0.7824087956021989, m2: 0.06046427002791939. Saving the model
+time used for this epoch: 10.00539517402649s
+***********
+Epoch    5, Train ACC: 0.72415, Train AUC: 0.73498, Train Loss: 0.6037
+Epoch    5, Valid ACC: 0.72251, Valid AUC: 0.72976, Valid AUC Curr: 0.9129, Valid Loss: 0.62493*
+Epoch    5, Test ACC: 0.73209, Test AUC: 0.75998, Test AUC Curr: 0.9237, Test Loss: 0.59882
+w_l1: 0.019923433561321795, w_l2: 0.03825564188455584
+m1: 0.7926370148259204, m2: 0.05782079844798085. Saving the model
+time used for this epoch: 10.355273246765137s
+***********
+Epoch    6, Train ACC: 0.7263, Train AUC: 0.73918, Train Loss: 0.60044
+Epoch    6, Valid ACC: 0.71894, Valid AUC: 0.72536, Valid AUC Curr: 0.95042, Valid Loss: 0.62611
+time used for this epoch: 7.833355665206909s
+***********
+Epoch    7, Train ACC: 0.7256, Train AUC: 0.74051, Train Loss: 0.59869
+Epoch    7, Valid ACC: 0.72147, Valid AUC: 0.72725, Valid AUC Curr: 0.92844, Valid Loss: 0.62574
+time used for this epoch: 7.882577896118164s
+***********
+Epoch    8, Train ACC: 0.72743, Train AUC: 0.7418, Train Loss: 0.59746
+Epoch    8, Valid ACC: 0.72067, Valid AUC: 0.7287, Valid AUC Curr: 0.94137, Valid Loss: 0.62378
+time used for this epoch: 7.779596567153931s
+***********
+Epoch    9, Train ACC: 0.72679, Train AUC: 0.74237, Train Loss: 0.59619
+Epoch    9, Valid ACC: 0.72227, Valid AUC: 0.73014, Valid AUC Curr: 0.92643, Valid Loss: 0.62455*
+Epoch    9, Test ACC: 0.73002, Test AUC: 0.75995, Test AUC Curr: 0.93523, Test Loss: 0.59841
+w_l1: 0.017901028756019535, w_l2: 0.03456550507839374
+m1: 0.7648509078793936, m2: 0.06491880862787924. Saving the model
+time used for this epoch: 10.359677791595459s
+***********
+Epoch   10, Train ACC: 0.72689, Train AUC: 0.7414, Train Loss: 0.59768
+Epoch   10, Valid ACC: 0.71991, Valid AUC: 0.72746, Valid AUC Curr: 0.94502, Valid Loss: 0.62504
+time used for this epoch: 7.83899450302124s
+***********
+Epoch   11, Train ACC: 0.7275, Train AUC: 0.74264, Train Loss: 0.59531
+Epoch   11, Valid ACC: 0.72331, Valid AUC: 0.72934, Valid AUC Curr: 0.93306, Valid Loss: 0.62372
+time used for this epoch: 7.842617511749268s
+***********
+Epoch   12, Train ACC: 0.72853, Train AUC: 0.74526, Train Loss: 0.59313
+Epoch   12, Valid ACC: 0.72251, Valid AUC: 0.73018, Valid AUC Curr: 0.93358, Valid Loss: 0.6243*
+Epoch   12, Test ACC: 0.73044, Test AUC: 0.76079, Test AUC Curr: 0.9412, Test Loss: 0.59639
+w_l1: 0.018419511729643345, w_l2: 0.035730956258028544
+m1: 0.6913210061635848, m2: 0.06664518928023432. Saving the model
+time used for this epoch: 10.351678371429443s
+***********
+Epoch   13, Train ACC: 0.72883, Train AUC: 0.74633, Train Loss: 0.59246
+Epoch   13, Valid ACC: 0.72014, Valid AUC: 0.7258, Valid AUC Curr: 0.94542, Valid Loss: 0.62523
+time used for this epoch: 8.074848175048828s
+***********
+Epoch   14, Train ACC: 0.72918, Train AUC: 0.74662, Train Loss: 0.59396
+Epoch   14, Valid ACC: 0.72241, Valid AUC: 0.73076, Valid AUC Curr: 0.92685, Valid Loss: 0.62382*
+Epoch   14, Test ACC: 0.73103, Test AUC: 0.76052, Test AUC Curr: 0.9336, Test Loss: 0.59561
+w_l1: 0.018551034247428454, w_l2: 0.03618791353348356
+m1: 0.6758953856405131, m2: 0.06564504065137097. Saving the model
+time used for this epoch: 10.36874532699585s
+***********
+Epoch   15, Train ACC: 0.72961, Train AUC: 0.74783, Train Loss: 0.59063
+Epoch   15, Valid ACC: 0.72084, Valid AUC: 0.72727, Valid AUC Curr: 0.93675, Valid Loss: 0.62556
+time used for this epoch: 8.077603578567505s
+***********
+Epoch   16, Train ACC: 0.73106, Train AUC: 0.7489, Train Loss: 0.59039
+Epoch   16, Valid ACC: 0.72304, Valid AUC: 0.73088, Valid AUC Curr: 0.92963, Valid Loss: 0.62255*
+Epoch   16, Test ACC: 0.73025, Test AUC: 0.75925, Test AUC Curr: 0.93573, Test Loss: 0.59671
+w_l1: 0.01813944995829929, w_l2: 0.03460970767540379
+m1: 0.7041479260369815, m2: 0.0658989784907405. Saving the model
+time used for this epoch: 10.296088457107544s
+***********
+Epoch   17, Train ACC: 0.73124, Train AUC: 0.75056, Train Loss: 0.58891
+Epoch   17, Valid ACC: 0.72307, Valid AUC: 0.73036, Valid AUC Curr: 0.93222, Valid Loss: 0.62291
+time used for this epoch: 8.242143392562866s
+***********
+Epoch   18, Train ACC: 0.73105, Train AUC: 0.75078, Train Loss: 0.58859
+Epoch   18, Valid ACC: 0.72194, Valid AUC: 0.72874, Valid AUC Curr: 0.92786, Valid Loss: 0.62654
+time used for this epoch: 8.000673055648804s
+***********
+Epoch   19, Train ACC: 0.73226, Train AUC: 0.75242, Train Loss: 0.58762
+Epoch   19, Valid ACC: 0.72191, Valid AUC: 0.73117, Valid AUC Curr: 0.92799, Valid Loss: 0.62375*
+Epoch   19, Test ACC: 0.73137, Test AUC: 0.76101, Test AUC Curr: 0.93393, Test Loss: 0.59604
+w_l1: 0.018916329993828453, w_l2: 0.03705104494926172
+m1: 0.6742295518907213, m2: 0.07048262119710237. Saving the model
+time used for this epoch: 10.285630702972412s
+***********
+Epoch   20, Train ACC: 0.7329, Train AUC: 0.75176, Train Loss: 0.58656
+Epoch   20, Valid ACC: 0.72157, Valid AUC: 0.72978, Valid AUC Curr: 0.93025, Valid Loss: 0.62509
+time used for this epoch: 8.129557847976685s
+***********
+Epoch   21, Train ACC: 0.73302, Train AUC: 0.75421, Train Loss: 0.58494
+Epoch   21, Valid ACC: 0.72084, Valid AUC: 0.72992, Valid AUC Curr: 0.93132, Valid Loss: 0.62591
+time used for this epoch: 7.961540222167969s
+***********
+Epoch   22, Train ACC: 0.73358, Train AUC: 0.75502, Train Loss: 0.58423
+Epoch   22, Valid ACC: 0.72187, Valid AUC: 0.7285, Valid AUC Curr: 0.92436, Valid Loss: 0.62488
+time used for this epoch: 8.038477182388306s
+***********
+Epoch   23, Train ACC: 0.73452, Train AUC: 0.75543, Train Loss: 0.58444
+Epoch   23, Valid ACC: 0.72144, Valid AUC: 0.7305, Valid AUC Curr: 0.92465, Valid Loss: 0.62694
+time used for this epoch: 7.716801881790161s
+***********
+Epoch   24, Train ACC: 0.73504, Train AUC: 0.75658, Train Loss: 0.58289
+Epoch   24, Valid ACC: 0.72054, Valid AUC: 0.72677, Valid AUC Curr: 0.94039, Valid Loss: 0.62766
+time used for this epoch: 7.958952188491821s
+***********
+Epoch   25, Train ACC: 0.73537, Train AUC: 0.75795, Train Loss: 0.5825
+Epoch   25, Valid ACC: 0.7242, Valid AUC: 0.73122, Valid AUC Curr: 0.92713, Valid Loss: 0.62737*
+Epoch   25, Test ACC: 0.72877, Test AUC: 0.75871, Test AUC Curr: 0.93235, Test Loss: 0.60065
+w_l1: 0.01839656810160148, w_l2: 0.03554789976791784
+m1: 0.667799433616525, m2: 0.06571663541831951. Saving the model
+time used for this epoch: 10.19151520729065s
+***********
+Epoch   26, Train ACC: 0.73574, Train AUC: 0.75696, Train Loss: 0.58317
+Epoch   26, Valid ACC: 0.72067, Valid AUC: 0.72625, Valid AUC Curr: 0.93983, Valid Loss: 0.62815
+time used for this epoch: 8.145429849624634s
+***********
+Epoch   27, Train ACC: 0.73691, Train AUC: 0.75706, Train Loss: 0.58254
+Epoch   27, Valid ACC: 0.72291, Valid AUC: 0.72853, Valid AUC Curr: 0.93728, Valid Loss: 0.62771
+time used for this epoch: 7.891532897949219s
+***********
+Epoch   28, Train ACC: 0.73731, Train AUC: 0.76057, Train Loss: 0.5792
+Epoch   28, Valid ACC: 0.72184, Valid AUC: 0.72971, Valid AUC Curr: 0.93478, Valid Loss: 0.62818
+time used for this epoch: 8.07560396194458s
+***********
+Epoch   29, Train ACC: 0.73764, Train AUC: 0.75903, Train Loss: 0.58182
+Epoch   29, Valid ACC: 0.72177, Valid AUC: 0.72816, Valid AUC Curr: 0.93607, Valid Loss: 0.62733
+time used for this epoch: 7.67434287071228s
+***********
+Epoch   30, Train ACC: 0.73804, Train AUC: 0.76085, Train Loss: 0.57934
+Epoch   30, Valid ACC: 0.72387, Valid AUC: 0.72603, Valid AUC Curr: 0.92295, Valid Loss: 0.62899
+time used for this epoch: 7.857200384140015s
+***********
+The best validation result occured at: 24-th epoch, with validation ACC: 0.7242 and AUC: 0.73122
+The best testing result occured at: 24-th epoch, with testing ACC: 0.72877 and AUC: 0.75871
+*********************************
+Epoch    1, Train ACC: 0.69199, Train AUC: 0.67581, Train Loss: 0.67958
+Epoch    1, Valid ACC: 0.71874, Valid AUC: 0.71382, Valid AUC Curr: 0.914, Valid Loss: 0.64447*
+Epoch    1, Test ACC: 0.72589, Test AUC: 0.74749, Test AUC Curr: 0.91584, Test Loss: 0.61877
+w_l1: 0.03226198852146063, w_l2: 0.05956512127391345
+m1: 0.7348992170581375, m2: 0.051313826491907. Saving the model
+time used for this epoch: 10.015634536743164s
+***********
+Epoch    2, Train ACC: 0.71837, Train AUC: 0.71667, Train Loss: 0.6235
+Epoch    2, Valid ACC: 0.72087, Valid AUC: 0.72028, Valid AUC Curr: 0.92817, Valid Loss: 0.63828*
+Epoch    2, Test ACC: 0.72864, Test AUC: 0.7516, Test AUC Curr: 0.93125, Test Loss: 0.61123
+w_l1: 0.031198916585627314, w_l2: 0.058163281337036424
+m1: 0.7276361819090454, m2: 0.06131247975777412. Saving the model
+time used for this epoch: 10.442170143127441s
+***********
+Epoch    3, Train ACC: 0.72062, Train AUC: 0.72093, Train Loss: 0.61515
+Epoch    3, Valid ACC: 0.72194, Valid AUC: 0.72481, Valid AUC Curr: 0.9148, Valid Loss: 0.63263*
+Epoch    3, Test ACC: 0.73068, Test AUC: 0.75661, Test AUC Curr: 0.92336, Test Loss: 0.60452
+w_l1: 0.025673872203932427, w_l2: 0.04932850483764259
+m1: 0.729968349158754, m2: 0.0580421974594228. Saving the model
+time used for this epoch: 10.379082918167114s
+***********
+Epoch    4, Train ACC: 0.72212, Train AUC: 0.72793, Train Loss: 0.61009
+Epoch    4, Valid ACC: 0.72287, Valid AUC: 0.72547, Valid AUC Curr: 0.93314, Valid Loss: 0.62933*
+Epoch    4, Test ACC: 0.73126, Test AUC: 0.75647, Test AUC Curr: 0.93941, Test Loss: 0.60076
+w_l1: 0.02354398696475413, w_l2: 0.0463160051357767
+m1: 0.77288022655339, m2: 0.06385366442738503. Saving the model
+time used for this epoch: 10.326874494552612s
+***********
+Epoch    5, Train ACC: 0.72432, Train AUC: 0.73268, Train Loss: 0.60566
+Epoch    5, Valid ACC: 0.7235, Valid AUC: 0.72701, Valid AUC Curr: 0.9318, Valid Loss: 0.63136*
+Epoch    5, Test ACC: 0.73128, Test AUC: 0.75849, Test AUC Curr: 0.93845, Test Loss: 0.60008
+w_l1: 0.02501983500688032, w_l2: 0.04758015494773493
+m1: 0.7651507579543562, m2: 0.0663654531883276. Saving the model
+time used for this epoch: 10.483395099639893s
+***********
+Epoch    6, Train ACC: 0.72575, Train AUC: 0.73539, Train Loss: 0.60337
+Epoch    6, Valid ACC: 0.72217, Valid AUC: 0.72906, Valid AUC Curr: 0.92815, Valid Loss: 0.62629*
+Epoch    6, Test ACC: 0.73009, Test AUC: 0.75876, Test AUC Curr: 0.93735, Test Loss: 0.59867
+w_l1: 0.021179113786605756, w_l2: 0.04141124123201332
+m1: 0.7492920206563385, m2: 0.06256114339880123. Saving the model
+time used for this epoch: 10.12724757194519s
+***********
+Epoch    7, Train ACC: 0.72554, Train AUC: 0.73774, Train Loss: 0.60123
+Epoch    7, Valid ACC: 0.72244, Valid AUC: 0.72761, Valid AUC Curr: 0.93862, Valid Loss: 0.62429
+time used for this epoch: 7.934540033340454s
+***********
+Epoch    8, Train ACC: 0.72574, Train AUC: 0.73829, Train Loss: 0.60043
+Epoch    8, Valid ACC: 0.72151, Valid AUC: 0.73089, Valid AUC Curr: 0.93618, Valid Loss: 0.62456*
+Epoch    8, Test ACC: 0.73096, Test AUC: 0.76017, Test AUC Curr: 0.94386, Test Loss: 0.59486
+w_l1: 0.020932343544705304, w_l2: 0.04035945553788365
+m1: 0.7639180409795102, m2: 0.0693108784205195. Saving the model
+time used for this epoch: 10.331660509109497s
+***********
+Epoch    9, Train ACC: 0.72702, Train AUC: 0.74065, Train Loss: 0.59652
+Epoch    9, Valid ACC: 0.72194, Valid AUC: 0.72964, Valid AUC Curr: 0.94337, Valid Loss: 0.62335
+time used for this epoch: 7.805485010147095s
+***********
+Epoch   10, Train ACC: 0.72835, Train AUC: 0.7429, Train Loss: 0.5952
+Epoch   10, Valid ACC: 0.72324, Valid AUC: 0.7312, Valid AUC Curr: 0.92854, Valid Loss: 0.62469*
+Epoch   10, Test ACC: 0.73098, Test AUC: 0.7597, Test AUC Curr: 0.93487, Test Loss: 0.59701
+w_l1: 0.019685434452259943, w_l2: 0.03810295400377024
+m1: 0.7136764950857905, m2: 0.06439820582640682. Saving the model
+time used for this epoch: 10.495463371276855s
+***********
+Epoch   11, Train ACC: 0.72826, Train AUC: 0.74328, Train Loss: 0.59557
+Epoch   11, Valid ACC: 0.7234, Valid AUC: 0.73054, Valid AUC Curr: 0.93732, Valid Loss: 0.62447
+time used for this epoch: 7.890560150146484s
+***********
+Epoch   12, Train ACC: 0.72958, Train AUC: 0.74439, Train Loss: 0.59552
+Epoch   12, Valid ACC: 0.72317, Valid AUC: 0.73118, Valid AUC Curr: 0.93691, Valid Loss: 0.62286
+time used for this epoch: 8.01088285446167s
+***********
+Epoch   13, Train ACC: 0.72866, Train AUC: 0.74499, Train Loss: 0.59351
+Epoch   13, Valid ACC: 0.72334, Valid AUC: 0.73078, Valid AUC Curr: 0.94327, Valid Loss: 0.62233
+time used for this epoch: 7.999449968338013s
+***********
+Epoch   14, Train ACC: 0.72987, Train AUC: 0.74642, Train Loss: 0.59247
+Epoch   14, Valid ACC: 0.72211, Valid AUC: 0.73041, Valid AUC Curr: 0.94221, Valid Loss: 0.6217
+time used for this epoch: 7.848021507263184s
+***********
+Epoch   15, Train ACC: 0.73029, Train AUC: 0.74706, Train Loss: 0.59177
+Epoch   15, Valid ACC: 0.72254, Valid AUC: 0.72901, Valid AUC Curr: 0.94102, Valid Loss: 0.62427
+time used for this epoch: 7.691659212112427s
+***********
+Epoch   16, Train ACC: 0.73166, Train AUC: 0.74806, Train Loss: 0.5917
+Epoch   16, Valid ACC: 0.7234, Valid AUC: 0.73043, Valid AUC Curr: 0.93267, Valid Loss: 0.62305
+time used for this epoch: 7.748645544052124s
+***********
+Epoch   17, Train ACC: 0.73127, Train AUC: 0.74914, Train Loss: 0.58897
+Epoch   17, Valid ACC: 0.72374, Valid AUC: 0.73305, Valid AUC Curr: 0.92489, Valid Loss: 0.62193*
+Epoch   17, Test ACC: 0.73066, Test AUC: 0.75999, Test AUC Curr: 0.93229, Test Loss: 0.59631
+w_l1: 0.01792402091285792, w_l2: 0.03479078785592671
+m1: 0.6765617191404298, m2: 0.06472359701492142. Saving the model
+time used for this epoch: 10.320241212844849s
+***********
+Epoch   18, Train ACC: 0.73162, Train AUC: 0.75053, Train Loss: 0.58845
+Epoch   18, Valid ACC: 0.72494, Valid AUC: 0.73109, Valid AUC Curr: 0.939, Valid Loss: 0.62459
+time used for this epoch: 7.828710556030273s
+***********
+Epoch   19, Train ACC: 0.73258, Train AUC: 0.75131, Train Loss: 0.58701
+Epoch   19, Valid ACC: 0.72414, Valid AUC: 0.73285, Valid AUC Curr: 0.93695, Valid Loss: 0.62437
+time used for this epoch: 7.973256349563599s
+***********
+Epoch   20, Train ACC: 0.73246, Train AUC: 0.75228, Train Loss: 0.58654
+Epoch   20, Valid ACC: 0.72281, Valid AUC: 0.73139, Valid AUC Curr: 0.93602, Valid Loss: 0.62289
+time used for this epoch: 7.897444486618042s
+***********
+Epoch   21, Train ACC: 0.73298, Train AUC: 0.75282, Train Loss: 0.58603
+Epoch   21, Valid ACC: 0.72194, Valid AUC: 0.73251, Valid AUC Curr: 0.9287, Valid Loss: 0.62372
+time used for this epoch: 7.642282009124756s
+***********
+Epoch   22, Train ACC: 0.73431, Train AUC: 0.75304, Train Loss: 0.58598
+Epoch   22, Valid ACC: 0.72271, Valid AUC: 0.72954, Valid AUC Curr: 0.93573, Valid Loss: 0.62622
+time used for this epoch: 7.876291990280151s
+***********
+Epoch   23, Train ACC: 0.73388, Train AUC: 0.75448, Train Loss: 0.58614
+Epoch   23, Valid ACC: 0.72244, Valid AUC: 0.73084, Valid AUC Curr: 0.93707, Valid Loss: 0.62497
+time used for this epoch: 8.086578130722046s
+***********
+Epoch   24, Train ACC: 0.73477, Train AUC: 0.75543, Train Loss: 0.5835
+Epoch   24, Valid ACC: 0.72264, Valid AUC: 0.73095, Valid AUC Curr: 0.9333, Valid Loss: 0.62565
+time used for this epoch: 7.98560643196106s
+***********
+Epoch   25, Train ACC: 0.73567, Train AUC: 0.75568, Train Loss: 0.58452
+Epoch   25, Valid ACC: 0.72277, Valid AUC: 0.729, Valid AUC Curr: 0.93492, Valid Loss: 0.62575
+time used for this epoch: 8.065514326095581s
+***********
+Epoch   26, Train ACC: 0.7358, Train AUC: 0.75608, Train Loss: 0.58294
+Epoch   26, Valid ACC: 0.72231, Valid AUC: 0.73068, Valid AUC Curr: 0.94076, Valid Loss: 0.62511
+time used for this epoch: 7.659621238708496s
+***********
+Epoch   27, Train ACC: 0.73571, Train AUC: 0.75678, Train Loss: 0.58312
+Epoch   27, Valid ACC: 0.72077, Valid AUC: 0.72862, Valid AUC Curr: 0.93597, Valid Loss: 0.62545
+time used for this epoch: 7.993744134902954s
+***********
+No improvement shown in 10 epochs. Quit Training.
+The best validation result occured at: 16-th epoch, with validation ACC: 0.72374 and AUC: 0.73305
+The best testing result occured at: 16-th epoch, with testing ACC: 0.73066 and AUC: 0.75999
+*********************************
+average validation ACC for 5 runs: 0.7229385307346327
+average validation AUC for 5 runs: 0.7305807564287312
+average validation AUC Current for 5 runs: 0.9280161092685832
+
+average waviness-l1 for 5 runs: 0.01805481381747646
+average waviness-l2 for 5 runs: 0.03554432541887674
+average consistency_m1 for 5 runs: 0.6982708645677161
+average consistency_m1 for 5 runs: 0.0654327746077456
+
+average test ACC for 5 runs: 0.7303297409178503
+average test AUC for 5 runs: 0.7587946868933916
+average test AUC Current for 5 runs: 0.9342358026920173
+
+latex: 
+cell_type & num. layer & layer_structure & learning rate & keep prob. & $\lambda_o$ & $\lambda_{w_1}$ & $\lambda_{w_2}$ & Avg. ACC(N) & Avg. AUC(N) & Avg. AUC(C) & Avg. $w_1$ & Avg. $w_2$ & Avg. $m_1$ & Avg. $m_2$\\ 
+LSTM & 1 & 200 & 0.0100 & 0.5000 & 0.1000 & 0.0030 & 3.0000 & 0.7229385307346327 $\pm$ 0.0008566986346626817 & 0.7305807564287312 $\pm$ 0.0014139102434628798 & 0.9280161092685832 $\pm$ 0.0024950968791815154 & 0.01805481381747646 $\pm$ 0.0006054627401017877 & 0.03554432541887674 $\pm$ 0.0011678299620523438 & 0.6982708645677161 $\pm$ 0.04430841512983225 & 0.0654327746077456 $\pm$ 0.0012893759364658007\\ 
+

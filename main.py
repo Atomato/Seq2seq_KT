@@ -21,24 +21,25 @@ rnn_cells = {
     "LayerNormBasicLSTM": tf.contrib.rnn.LayerNormBasicLSTMCell,
 }
 
+num_runs = 5
+num_epochs = 30
+batch_size = 128
+keep_prob = 0.5
+
 network_config = {}
-network_config['batch_size'] = 64
+network_config['batch_size'] = batch_size
 network_config['hidden_layer_structure'] = [200, ]
 network_config['learning_rate'] = 1e-2
-network_config['keep_prob'] = 0.5
+network_config['keep_prob'] = keep_prob
 network_config['rnn_cell'] = rnn_cells['LSTM']
 network_config['max_grad_norm'] = 5.0
 network_config['lambda_w1'] = 0.003
 network_config['lambda_w2'] = 3.0
 network_config['lambda_o'] = 0.1
-network_config['embedding'] = True
-network_config['separate_embedding'] = True
-network_config['expand_dim'] = False
-
-num_runs = 5
-num_epochs = 30
-batch_size = 128
-keep_prob = 0.5
+network_config['emb_layer'] = True
+network_config['skill_separate_emb'] = True
+network_config['expand_correct_dim'] = False
+network_config['embedding_dims'] = 200
 
 train_path = './data/ASSISTment_skill_builder_only_1127/assistment_1127_train.csv'
 valid_path = './data/ASSISTment_skill_builder_only_1127/assistment_1127_valid.csv'
