@@ -1,46 +1,46 @@
 # Skill Embedded DKT
 
-  - DKT 모델의 단점을 보완한 [DKT+](https://github.com/ckyeungac/deep-knowledge-tracing-plus) 모델 기반 지식 추적 모델 구현.
+- DKT 모델의 단점을 보완한 [DKT+](https://github.com/ckyeungac/deep-knowledge-tracing-plus) 모델 기반 지식 추적 모델 구현.
  
-  - **Skill Embedded DKT+**
+**Skill Embedded DKT+**
 
-    - Input과 LSTM input 사이 embedding layer 추가.
-      - network_config['emb_layer'] = *True*/*False*
-      - network_config['embedding_dims'] = 200
+- Input과 LSTM input 사이 embedding layer 추가.
+  - network_config['emb_layer'] = *True*/*False*
+  - network_config['embedding_dims'] = 200
 
-    - Skill의 embedding과 correct 정보를 분리.
-      - network_config['skill_separate_emb'] = *True*/*False*
+- Skill의 embedding과 correct 정보를 분리.
+  - network_config['skill_separate_emb'] = *True*/*False*
 
-    - Correct 정보의 효과를 위한 차원 확장.
-      - network_config['expand_correct_dim'] = *True*/*False*
+- Correct 정보의 효과를 위한 차원 확장.
+  - network_config['expand_correct_dim'] = *True*/*False*
  
  
-### Dataset Description
+## Dataset Description
 
-  - [Individual BKT](http://gitlab.tmaxwork.shop/hyperstudy/knowledgetracing/python_kt_unitknowledgetracing/-/tree/individual_bkt)의 [ASSISTment_skill_builder_only_*_1123.txt](http://gitlab.tmaxwork.shop/hyperstudy/knowledgetracing/python_kt_unitknowledgetracing/-/blob/individual_bkt/data/ASSISTment_skill_builder_only_train_1123.txt) 데이터 활용.
+- [Individual BKT](http://gitlab.tmaxwork.shop/hyperstudy/knowledgetracing/python_kt_unitknowledgetracing/-/tree/individual_bkt)의 [ASSISTment_skill_builder_only_*_1123.txt](http://gitlab.tmaxwork.shop/hyperstudy/knowledgetracing/python_kt_unitknowledgetracing/-/blob/individual_bkt/data/ASSISTment_skill_builder_only_train_1123.txt) 데이터 활용.
 
-  - ./data/ASSISTment_skill_builder_only_1127/assitment_1127_*.csv
+- ./data/ASSISTment_skill_builder_only_1127/assitment_1127_*.csv
 
-  - Data Format
-    - 첫 번째 row = user id (0 ~ num_user-1)
-    - 두 번째 row = skill id sequence (0 ~ num_skill-1)
-    - 세 번재 row = correct sequence (0/1)
+### Data Format
+  - 첫 번째 row = user id (0 ~ num_user-1)
+  - 두 번째 row = skill id sequence (0 ~ num_skill-1)
+  - 세 번재 row = correct sequence (0/1)
 
-    ```
-    308
-    1,1,1,1,7,7,9,10,10,10,10,11,11,45,54
-    0,1,1,1,1,1,0,0,1,1,1,1,1,0,0
-    ```
+  ```
+  308
+  1,1,1,1,7,7,9,10,10,10,10,11,11,45,54
+  0,1,1,1,1,1,0,0,1,1,1,1,1,0,0
+  ```
 
-  - Data 통계
-    - 총 skill 개수 (*num_skill*) = 105
-    - 총 user 수 (*num_user*) = 4003
-    - train_data : \# = 3661, *max_length* = 511
-    - valid data : \# = 1978, *max_length* = 127
-    - test data : \# = 2895, *max_length* = 213
+### Data 통계
+  - 총 skill 개수 (*num_skill*) = 105
+  - 총 user 수 (*num_user*) = 4003
+  - train_data : \# = 3661, *max_length* = 511
+  - valid data : \# = 1978, *max_length* = 127
+  - test data : \# = 2895, *max_length* = 213
 
 
-### How To Run
+## How To Run
 
 ```
 pip install -r requirements.txt
@@ -48,9 +48,9 @@ pip install -r requirements.txt
 ```
 
 
-### Test Result
+## Test Result
 
-#### 1. ASSISTment_skill_builder_only_1127
+### 1. ASSISTment_skill_builder_only_1127
 
   - 5번의 모델 학습 반복 및 평균 성능 기록.
   - ./results/assistment_1127/logs/ 에 결과 저장.
@@ -116,7 +116,7 @@ pip install -r requirements.txt
     average test AUC Current for 5 runs: 0.9371024762776695
     ```
 
-  - **skill_separate_emb = *True* & expand_correct_dim = *False***
+  - **skill_separate_emb = *True* & expand_correct_dim = *False* \***
 
     ```
     average validation ACC for 5 runs: 0.7258170914542729
@@ -148,7 +148,7 @@ pip install -r requirements.txt
     average test AUC Current for 5 runs: 0.9342358026920173
     ```
 
-### ToDo
+## ToDo
 
 1. **User specific DKT+**
     - user_id에 따라 initial hidden state 값을 달리 설정. [user_specific_dkt](http://gitlab.tmaxwork.shop/hyperstudy/knowledgetracing/python_kt_unitknowledgetracing/-/tree/user_specific_dkt)
@@ -168,7 +168,7 @@ pip install -r requirements.txt
     - 모델이 잘 학습할 수 있는 input 시퀀스, 즉 문제 시퀀스를 생성 및 추천
 
 
-### Detail hyperparameter for the program
+## Detail hyperparameter for the program
 
 - 기존 DKT+ repository
 
@@ -224,7 +224,7 @@ optional arguments:
 ```
 
 
-### Citation
+## Citation
 
 This is the repository for the code in the paper *Addressing Two Problems in Deep Knowledge Tracing via Prediction-Consistent Regularization* ([ACM](https://dl.acm.org/citation.cfm?id=3231647), [pdf](https://arxiv.org/pdf/1806.02180.pdf))
 
