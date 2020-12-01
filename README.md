@@ -22,7 +22,6 @@
 ## Dataset Description
 
 - [Individual BKT](http://gitlab.tmaxwork.shop/hyperstudy/knowledgetracing/python_kt_unitknowledgetracing/-/tree/individual_bkt)의 [ASSISTment_skill_builder_only_*_1123.txt](http://gitlab.tmaxwork.shop/hyperstudy/knowledgetracing/python_kt_unitknowledgetracing/-/blob/individual_bkt/data/ASSISTment_skill_builder_only_train_1123.txt) 데이터 활용.
-
 - ./data/ASSISTment_skill_builder_only_1127/assitment_1127_*.csv
 
 ### Data Format
