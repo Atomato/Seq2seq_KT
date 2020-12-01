@@ -4,15 +4,19 @@
  
 **Skill Embedded DKT+**
 
-- Input과 LSTM input 사이 embedding layer 추가.
-  - network_config['emb_layer'] = *True*/*False*
-  - network_config['embedding_dims'] = 200
+- Parameter
 
-- Skill의 embedding과 correct 정보를 분리.
-  - network_config['skill_separate_emb'] = *True*/*False*
+```
+- network_config['emb_layer'] = True/False
+- network_config['embedding_dims'] = 200
+- network_config['skill_separate_emb'] = True/False
+- network_config['expand_correct_dim'] = True/False
+```
 
-- Correct 정보의 효과를 위한 차원 확장.
-  - network_config['expand_correct_dim'] = *True*/*False*
+- *emb_layer* : data input과 LSTM input 사이 embedding layer 추가.
+- *skill_separate_emb* : skill의 embedding과 correct 정보를 분리.
+- *expand_correct_dim* : correct 정보의 효과를 위한 차원 확장.
+
  
  
 ## Dataset Description
