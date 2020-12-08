@@ -23,15 +23,18 @@ class OriginalInputProcessor(object):
         """
         # pad the sequence with the maximum sequence length
         max_seq_length = max([len(problem) for problem in problem_seqs])
-        problem_seqs_pad = np.array([pad(problem, max_seq_length, target_value=-1) for problem in problem_seqs])
-        correct_seqs_pad = np.array([pad(correct, max_seq_length, target_value=-1) for correct in correct_seqs])
+        problem_seqs_pad = np.array(
+            [pad(problem, max_seq_length, target_value=-1) for problem in problem_seqs])
+        correct_seqs_pad = np.array(
+            [pad(correct, max_seq_length, target_value=-1) for correct in correct_seqs])
 
         # find the correct seqs matrix as the following way:
         # Let problem_seq = [1,3,2,-1,-1] as a and correct_seq = [1,0,1,-1,-1] as b, which are padded already
         # First, find the element-wise multiplication of a*b*b = [1,0,2,-1,-1]
         # Then, for any values 0, assign it to -1 in the vector = [1,-1,2,-1,-1] as c
         # Such that when we one hot encoding the vector c, it will results a zero vector
-        temp = problem_seqs_pad * correct_seqs_pad * correct_seqs_pad  # temp is c in the comment.
+        # temp is c in the comment.
+        temp = problem_seqs_pad * correct_seqs_pad * correct_seqs_pad
         temp[temp == 0] = -1
         correct_seqs_pad = temp
 
@@ -101,7 +104,8 @@ class BatchGenerator:
         self.cursor = 0
 
     def shuffle(self):
-        self.problem_seqs, self.correct_seqs = shuffle(self.problem_seqs, self.correct_seqs, random_state=42)
+        self.problem_seqs, self.correct_seqs = shuffle(
+            self.problem_seqs, self.correct_seqs, random_state=42)
 
 
 def read_data_from_csv(filename):
@@ -161,20 +165,28 @@ def read_data_from_csv(filename):
 
 class DKTData:
     def __init__(self, train_path, valid_path, test_path, batch_size=32):
-        self.students_train, num_problems_train, max_seq_length_train = read_data_from_csv(train_path)
-        self.students_valid, num_problems_valid, max_seq_length_valid = read_data_from_csv(valid_path)
-        self.students_test, num_problems_test, max_seq_length_test = read_data_from_csv(test_path)
-        self.num_problems = max(num_problems_test, num_problems_train, num_problems_valid)
-        self.max_seq_length = max(max_seq_length_train, max_seq_length_test, max_seq_length_valid)
+        self.students_train, num_problems_train, max_seq_length_train = read_data_from_csv(
+            train_path)
+        self.students_valid, num_problems_valid, max_seq_length_valid = read_data_from_csv(
+            valid_path)
+        self.students_test, num_problems_test, max_seq_length_test = read_data_from_csv(
+            test_path)
+        self.num_problems = max(
+            num_problems_test, num_problems_train, num_problems_valid)
+        self.max_seq_length = max(
+            max_seq_length_train, max_seq_length_test, max_seq_length_valid)
 
         problem_seqs = [student[1] for student in self.students_train]
         correct_seqs = [student[2] for student in self.students_train]
-        self.train = BatchGenerator(problem_seqs, correct_seqs, self.num_problems, batch_size)
+        self.train = BatchGenerator(
+            problem_seqs, correct_seqs, self.num_problems, batch_size)
 
         problem_seqs = [student[1] for student in self.students_valid]
         correct_seqs = [student[2] for student in self.students_valid]
-        self.valid = BatchGenerator(problem_seqs, correct_seqs, self.num_problems, batch_size)
-        
+        self.valid = BatchGenerator(
+            problem_seqs, correct_seqs, self.num_problems, batch_size)
+
         problem_seqs = [student[1] for student in self.students_test]
         correct_seqs = [student[2] for student in self.students_test]
-        self.test = BatchGenerator(problem_seqs, correct_seqs, self.num_problems, batch_size)
+        self.test = BatchGenerator(
+            problem_seqs, correct_seqs, self.num_problems, batch_size)

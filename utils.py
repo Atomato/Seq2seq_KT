@@ -1,4 +1,6 @@
-import os, sys, time
+import os
+import sys
+import time
 import tensorflow as tf
 from sklearn.metrics import roc_curve, auc, accuracy_score
 from load_data import OriginalInputProcessor
@@ -22,8 +24,8 @@ def _seq_length(sequence):
 
 
 class DKT(object):
-    def __init__(self, sess, data_train, data_valid, data_test, num_problems, network_config, 
-                 save_dir_prefix='./', num_runs=5, num_epochs=500, keep_prob=0.5, logging=True, 
+    def __init__(self, sess, data_train, data_valid, data_test, num_problems, network_config,
+                 save_dir_prefix='./', num_runs=5, num_epochs=500, keep_prob=0.5, logging=True,
                  save=True):
         # the tensorflow session used
         self.sess = sess
@@ -47,30 +49,36 @@ class DKT(object):
 
         # set saving and logging directory and path
         cell_type_str = repr(network_config['rnn_cell']).split('.')[-1][:-6]
-        layer_structure_str = "-".join([str(i) for i in network_config['hidden_layer_structure']])
+        layer_structure_str = "-".join([str(i)
+                                        for i in network_config['hidden_layer_structure']])
         model_name = self.model_name = cell_type_str + '-' + layer_structure_str
         save_dir_name = ""
 
         save_dir_name = 'n{}.lo{}.lw1{}.lw2{}.emb{}'.format(layer_structure_str,
-                                                    network_config['lambda_o'],
-                                                    network_config['lambda_w1'],
-                                                    network_config['lambda_w2'],
-                                                    network_config['emb_layer'])
+                                                            network_config['lambda_o'],
+                                                            network_config['lambda_w1'],
+                                                            network_config['lambda_w2'],
+                                                            network_config['emb_layer'])
         if network_config['emb_layer']:
-            save_dir_name += '.sep{}'.format(network_config['skill_separate_emb'])
+            save_dir_name += '.sep{}'.format(
+                network_config['skill_separate_emb'])
             if network_config['skill_separate_emb']:
-                save_dir_name += '.expand{}'.format(network_config['expand_correct_dim'])
-                
+                save_dir_name += '.expand{}'.format(
+                    network_config['expand_correct_dim'])
+
         save_dir_name += "/"
 
-        self.ckpt_save_dir = os.path.join(save_dir_prefix, 'checkpoints', save_dir_name)
-        self.log_save_dir = os.path.join(save_dir_prefix, 'logs', save_dir_name)
+        self.ckpt_save_dir = os.path.join(
+            save_dir_prefix, 'checkpoints', save_dir_name)
+        self.log_save_dir = os.path.join(
+            save_dir_prefix, 'logs', save_dir_name)
         print('ckpt_save_dir: ', self.ckpt_save_dir)
         print('log_save_dir: ', self.log_save_dir)
 
         if not os.path.exists(self.log_save_dir):
             os.makedirs(self.log_save_dir)
-        self.log_file_path = os.path.join(self.log_save_dir, "{}_{}.log".format(model_name, str(time.time())))
+        self.log_file_path = os.path.join(
+            self.log_save_dir, "{}_{}.log".format(model_name, str(time.time())))
         self.logging = logging
         self.save = save
 
@@ -103,7 +111,8 @@ class DKT(object):
                 model.keep_prob: keep_prob,
             }
             _, _target_preds, _target_labels, _loss = sess.run(
-                [model.train_op, model.target_preds, model.target_labels, model.loss],
+                [model.train_op, model.target_preds,
+                    model.target_labels, model.loss],
                 feed_dict=feed_dict
             )
             y_pred += [p for p in _target_preds]
@@ -115,7 +124,8 @@ class DKT(object):
             fpr, tpr, thres = roc_curve(y_true, y_pred, pos_label=1)
             auc_score = auc(fpr, tpr)
         except ValueError:
-            self._log("Value Error is encountered during finding the acc_score and auc_score. Assign the AUC to 0 now.")
+            self._log(
+                "Value Error is encountered during finding the acc_score and auc_score. Assign the AUC to 0 now.")
             acc_score = 0.0
             auc_score = 0.0
             loss = 999999.9
@@ -169,10 +179,12 @@ class DKT(object):
             acc_score = accuracy_score(np.array(y_true), np.round(y_pred))
             fpr, tpr, thres = roc_curve(y_true, y_pred, pos_label=1)
             auc_score = auc(fpr, tpr)
-            fpr, tpr, thres = roc_curve(y_true_current, y_pred_current, pos_label=1)
+            fpr, tpr, thres = roc_curve(
+                y_true_current, y_pred_current, pos_label=1)
             auc_score_current = auc(fpr, tpr)
         except ValueError:
-            self._log("Value Error is encountered during finding the auc_score. Assign the AUC to 0 now.")
+            self._log(
+                "Value Error is encountered during finding the auc_score. Assign the AUC to 0 now.")
             acc_score = 0.0
             auc_score = 0.0
             auc_score_current = 0.0
@@ -205,7 +217,8 @@ class DKT(object):
             auc_current_test = 0.0
             best_valid_acc = 0.0
             best_valid_auc = 0.0
-            best_valid_auc_current = 0.0 # the auc_current when the test_auc is the best.
+            # the auc_current when the test_auc is the best.
+            best_valid_auc_current = 0.0
             best_waviness_l1 = 0.0
             best_waviness_l2 = 0.0
             best_consistency_m1 = 0.0
@@ -218,7 +231,8 @@ class DKT(object):
                 self._log(
                     'Epoch {0:>4}, Train ACC: {1:.5}, Train AUC: {2:.5}, Train Loss: {3:.5}'.format(epoch_idx + 1, acc_train, auc_train, loss_train))
 
-                acc_valid, auc_valid, auc_current_valid, loss_valid = self.evaluate('valid')
+                acc_valid, auc_valid, auc_current_valid, loss_valid = self.evaluate(
+                    'valid')
                 valid_msg = "Epoch {:>4}, Valid ACC: {:.5}, Valid AUC: {:.5}, Valid AUC Curr: {:.5}, Valid Loss: {:.5}".format(
                     epoch_idx + 1,
                     acc_valid,
@@ -238,7 +252,8 @@ class DKT(object):
                     best_valid_auc_current = auc_current_valid
                     best_waviness_l1, best_waviness_l2 = self.waviness('valid')
 
-                    acc_test, auc_test, auc_current_test, loss_test = self.evaluate('test')
+                    acc_test, auc_test, auc_current_test, loss_test = self.evaluate(
+                        'test')
                     valid_msg += "\nEpoch {:>4}, Test ACC: {:.5}, Test AUC: {:.5}, Test AUC Curr: {:.5}, Test Loss: {:.5}".format(
                         epoch_idx + 1,
                         acc_test,
@@ -251,31 +266,35 @@ class DKT(object):
                     best_consistency_m1 = m1
                     best_consistency_m2 = m2
 
-                    valid_msg += "\nw_l1: {0:5}, w_l2: {1:5}".format(best_waviness_l1, best_waviness_l2)
-                    valid_msg += "\nm1: {0:5}, m2: {1:5}".format(best_consistency_m1, best_consistency_m2)
+                    valid_msg += "\nw_l1: {0:5}, w_l2: {1:5}".format(
+                        best_waviness_l1, best_waviness_l2)
+                    valid_msg += "\nm1: {0:5}, m2: {1:5}".format(
+                        best_consistency_m1, best_consistency_m2)
                     if self.save:
                         valid_msg += ". Saving the model"
                         self.save_model()
-                    
+
                 self._log(valid_msg)
 
                 epoch_end_time = time.time()
-                self._log("time used for this epoch: {0}s".format(epoch_end_time - epoch_start_time))
+                self._log("time used for this epoch: {0}s".format(
+                    epoch_end_time - epoch_start_time))
                 self._log(SPLIT_MSG)
 
                 # quit the training if there is no improve in AUC for 10 epochs.
                 if epoch_idx - best_epoch_idx >= 10:
-                    self._log("No improvement shown in 10 epochs. Quit Training.")
+                    self._log(
+                        "No improvement shown in 10 epochs. Quit Training.")
                     break
                 sys.stdout.flush()
                 # shuffle the training dataset
                 self.data_train.shuffle()
-                
+
             self._log("The best validation result occured at: {0}-th epoch, with validation ACC: {1:.5} and AUC: {2:.5}".format(
                 best_epoch_idx + 1, best_valid_acc, best_valid_auc))
             self._log("The best testing result occured at: {0}-th epoch, with testing ACC: {1:.5} and AUC: {2:.5}".format(
                 best_epoch_idx + 1, acc_test, auc_test))
-            
+
             self._log(SPLIT_MSG * 3)
             self.wavinesses_l1.append(best_waviness_l1)
             self.wavinesses_l2.append(best_waviness_l2)
@@ -299,25 +318,36 @@ class DKT(object):
         avg_consistency_m1 = np.average(self.consistency_m1)
         avg_consistency_m2 = np.average(self.consistency_m2)
 
-        self._log("average validation ACC for {0} runs: {1}".format(num_runs, avg_acc))
-        self._log("average validation AUC for {0} runs: {1}".format(num_runs, avg_auc))
-        self._log("average validation AUC Current for {0} runs: {1}".format(num_runs, avg_auc_current))
-        self._log("\naverage waviness-l1 for {0} runs: {1}".format(num_runs, avg_waviness_l1))
-        self._log("average waviness-l2 for {0} runs: {1}".format(num_runs, avg_waviness_l2))
-        self._log("average consistency_m1 for {0} runs: {1}".format(num_runs, avg_consistency_m1))
-        self._log("average consistency_m1 for {0} runs: {1}".format(num_runs, avg_consistency_m2))
-        
+        self._log("average validation ACC for {0} runs: {1}".format(
+            num_runs, avg_acc))
+        self._log("average validation AUC for {0} runs: {1}".format(
+            num_runs, avg_auc))
+        self._log("average validation AUC Current for {0} runs: {1}".format(
+            num_runs, avg_auc_current))
+        self._log(
+            "\naverage waviness-l1 for {0} runs: {1}".format(num_runs, avg_waviness_l1))
+        self._log(
+            "average waviness-l2 for {0} runs: {1}".format(num_runs, avg_waviness_l2))
+        self._log("average consistency_m1 for {0} runs: {1}".format(
+            num_runs, avg_consistency_m1))
+        self._log("average consistency_m1 for {0} runs: {1}".format(
+            num_runs, avg_consistency_m2))
+
         self._log(f"\ntest ACC for {num_runs} runs : {self.test_accs}")
         self._log(f"test AUC for {num_runs} runs : {self.test_aucs}")
-        self._log("\naverage test ACC for {0} runs: {1}".format(num_runs, avg_test_acc))
-        self._log("average test AUC for {0} runs: {1}".format(num_runs, avg_test_auc))
-        self._log("average test AUC Current for {0} runs: {1}\n".format(num_runs, avg_test_auc_current))
-        
+        self._log("\naverage test ACC for {0} runs: {1}".format(
+            num_runs, avg_test_acc))
+        self._log("average test AUC for {0} runs: {1}".format(
+            num_runs, avg_test_auc))
+        self._log("average test AUC Current for {0} runs: {1}\n".format(
+            num_runs, avg_test_auc_current))
+
         self._log("latex: \n" + self.auc_summary_in_latex())
         return avg_acc, avg_auc
 
     def save_model(self):
-        save_dir = os.path.join(self.ckpt_save_dir, 'run_{}'.format(self.run_count), self.model_name)
+        save_dir = os.path.join(self.ckpt_save_dir, 'run_{}'.format(
+            self.run_count), self.model_name)
         sess = self.sess
         # Define the tf saver
         saver = tf.train.Saver()
@@ -327,7 +357,8 @@ class DKT(object):
         saver.save(sess=sess, save_path=save_path)
 
     def load_model(self):
-        save_dir = os.path.join(self.ckpt_save_dir, 'run_{}'.format(self.run_count), self.model_name)
+        save_dir = os.path.join(self.ckpt_save_dir, 'run_{}'.format(
+            self.run_count), self.model_name)
         sess = self.sess
         saver = tf.train.Saver()
         save_path = os.path.join(save_dir, self.model_name)
@@ -340,7 +371,8 @@ class DKT(object):
         model = self.model
         sess = self.sess
         num_layer = len(model.hidden_layer_structure)
-        assert layer < num_layer, "There are only {0} layers. indexed from 0.".format(num_layer)
+        assert layer < num_layer, "There are only {0} layers. indexed from 0.".format(
+            num_layer)
 
         input_processor = OriginalInputProcessor()
         X, y_seq, y_corr = input_processor.process_problems_and_corrects(problem_seqs=problem_seqs,
@@ -403,14 +435,17 @@ class DKT(object):
         #     return m, h
         #
         # assert len(aucs) > 1, "There should be at least two auc scores to find the interval."
-        cell_type_str = repr(self.network_config['rnn_cell']).split('.')[-1][:-6]
-        num_layers_str = str(len(self.network_config['hidden_layer_structure']))
-        layer_structure_str = ", ".join([str(i) for i in self.network_config['hidden_layer_structure']])
+        cell_type_str = repr(
+            self.network_config['rnn_cell']).split('.')[-1][:-6]
+        num_layers_str = str(
+            len(self.network_config['hidden_layer_structure']))
+        layer_structure_str = ", ".join(
+            [str(i) for i in self.network_config['hidden_layer_structure']])
 
         # experiment result
         acc_mean = np.average(self.accs)
         acc_std = np.std(self.accs)
-        
+
         auc_mean = np.average(self.aucs)
         auc_std = np.std(self.aucs)
 
@@ -482,12 +517,14 @@ class DKT(object):
             target_problem_ids = problem_ids_answered
 
         # get_output_layer return output in shape (1, 38, 124)
-        output = self.get_output_layer(problem_seqs=[problem_seq], correct_seqs=[correct_seq])[0]  # shape (38, 124)
+        output = self.get_output_layer(problem_seqs=[problem_seq], correct_seqs=[
+                                       correct_seq])[0]  # shape (38, 124)
         output = output[:, target_problem_ids]  # shape (38, ?)
         output = np.transpose(output)  # shape (?, 38)
 
         y_labels = target_problem_ids
-        x_labels = ["({},{})".format(p, c) for p, c in zip(problem_seq, correct_seq)]
+        x_labels = ["({},{})".format(p, c)
+                    for p, c in zip(problem_seq, correct_seq)]
         df = pd.DataFrame(output)
         df.columns = x_labels
         df.index = y_labels
@@ -497,12 +534,14 @@ class DKT(object):
     def plot_hidden_layer(self, problem_seq, correct_seq, layer):
         import matplotlib.pyplot as plt
         import seaborn as sns
-        output = self.get_hidden_layer_output(problem_seqs=[problem_seq], correct_seqs=[correct_seq], layer=layer)
+        output = self.get_hidden_layer_output(
+            problem_seqs=[problem_seq], correct_seqs=[correct_seq], layer=layer)
         output = output[0]  # ignore the batch_idx
         output = np.transpose(output)
 
         y_labels = range(output.shape[0])
-        x_labels = ["({},{})".format(p, c) for p, c in zip(problem_seq, correct_seq)]
+        x_labels = ["({},{})".format(p, c)
+                    for p, c in zip(problem_seq, correct_seq)]
         df = pd.DataFrame(output)
         df.columns = x_labels
         df.index = y_labels
@@ -512,13 +551,13 @@ class DKT(object):
     def waviness(self, mode='valid'):
         if mode == 'train':
             data = self.data_train
-            is_train=True
+            is_train = True
         elif mode == 'valid':
             data = self.data_valid
-            is_train=False
+            is_train = False
         else:
             data = self.data_test
-            is_train=False
+            is_train = False
         data.reset_cursor()
         model = self.model
         sess = self.sess
@@ -550,17 +589,16 @@ class DKT(object):
 
         return waviness_l1, waviness_l2
 
-
     def waviness_np(self, mode='valid'):
         if mode == 'train':
             data = self.data_train
-            is_train=True
+            is_train = True
         elif mode == 'valid':
             data = self.data_valid
-            is_train=False
+            is_train = False
         else:
             data = self.data_test
-            is_train=False
+            is_train = False
         data.reset_cursor()
         model = self.model
         sess = self.sess
@@ -614,16 +652,18 @@ class DKT(object):
         sign_diff_score = 0
         diff_score = 0
         for i in range(len(problem_seqs)):
-            if i%20 == 0:
+            if i % 20 == 0:
                 print(i, end='\r')
             problem_seq = problem_seqs[i]
             correct_seq = correct_seqs[i]
-            outputs = self.get_output_layer([problem_seq], [correct_seq]) # shape: (batch, time, num_problems)
+            # shape: (batch, time, num_problems)
+            outputs = self.get_output_layer([problem_seq], [correct_seq])
 
-            for j in range(1, len(problem_seq)): # exclude the prediction of the first output
+            # exclude the prediction of the first output
+            for j in range(1, len(problem_seq)):
                 target_id = problem_seq[j]
                 label = correct_seq[j]
-                score = 1.0 if label==1 else -1.0
+                score = 1.0 if label == 1 else -1.0
 
                 prev_pred = outputs[0][j-1][target_id]
                 curr_pred = outputs[0][j][target_id]
@@ -638,13 +678,13 @@ class DKT(object):
     def consistency(self, mode='valid'):
         if mode == 'train':
             data = self.data_train
-            is_train=True
+            is_train = True
         elif mode == 'valid':
             data = self.data_valid
-            is_train=False
+            is_train = False
         else:
             data = self.data_test
-            is_train=False
+            is_train = False
         data.reset_cursor()
         model = self.model
         sess = self.sess
@@ -673,17 +713,20 @@ class DKT(object):
             # finding m1, m2 for this batch
             base = y_seq_batch[:, 1:, :].copy()
             base[:] = -1.0
-            coefficient = np.sum( (np.power(base, 1 - y_corr_batch[:, 1:, :])) * y_seq_batch[:, 1:, :], axis=2)
+            coefficient = np.sum(
+                (np.power(base, 1 - y_corr_batch[:, 1:, :])) * y_seq_batch[:, 1:, :], axis=2)
 
             m1 = np.sum(
                 coefficient * np.sign(np.sum(
-                    (pred_seqs[:, 1:, :] - pred_seqs[:, :-1, :]) * y_seq_batch[:, 1:, :], #y_t-y_{t-1} \dot
+                    (pred_seqs[:, 1:, :] - pred_seqs[:, :-1, :]) *
+                    y_seq_batch[:, 1:, :],  # y_t-y_{t-1} \dot
                     axis=2
                 ))
             )
             m2 = np.sum(
                 coefficient * np.sum(
-                    (pred_seqs[:, 1:, :] - pred_seqs[:, :-1, :]) * y_seq_batch[:, 1:, :],
+                    (pred_seqs[:, 1:, :] - pred_seqs[:, :-1, :]) *
+                    y_seq_batch[:, 1:, :],
                     axis=2
                 )
             )

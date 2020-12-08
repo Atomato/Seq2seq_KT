@@ -5,14 +5,13 @@ Created on Fri Nov 20 11:16:30 2020
 @author: LSH
 """
 
+from load_data import DKTData
+from utils import DKT
+import time
+import tensorflow as tf
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-import tensorflow as tf
-import time
-
-from utils import DKT
-from load_data import DKTData
 
 rnn_cells = {
     "LSTM": tf.contrib.rnn.LSTMCell,
@@ -66,9 +65,10 @@ def main():
     # run optimization of the created model
     dkt.model.build_graph()
     dkt.run_optimization()
-    
+
     # close the session
     sess.close()
+
 
 if __name__ == "__main__":
     start_time = time.time()
