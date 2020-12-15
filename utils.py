@@ -1,12 +1,14 @@
 import os
 import sys
 import time
-import tensorflow as tf
-from sklearn.metrics import roc_curve, auc, accuracy_score
-from load_data import OriginalInputProcessor
-from model import Model
+
 import numpy as np
 import pandas as pd
+import tensorflow as tf
+from sklearn.metrics import accuracy_score, auc, roc_curve
+
+from load_data import OriginalInputProcessor
+from model import Model
 
 SPLIT_MSG = "***********"
 

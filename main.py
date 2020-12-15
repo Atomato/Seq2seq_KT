@@ -5,13 +5,22 @@ Created on Fri Nov 20 11:16:30 2020
 @author: LSH
 """
 
+import argparse
+import os
+import time
+
+import tensorflow as tf
+
 from load_data import DKTData
 from utils import DKT
-import time
-import tensorflow as tf
-import os
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
+parser = argparse.ArgumentParser()
+
+# data file configuration
+parser.add_argument('--dataset', type=str, default='assist2009')
+args = parser.parse_args()
 
 rnn_cells = {
     "LSTM": tf.contrib.rnn.LSTMCell,
@@ -40,10 +49,16 @@ network_config['skill_separate_emb'] = True
 network_config['expand_correct_dim'] = False
 network_config['embedding_dims'] = 200
 
-train_path = './data/ASSISTment_skill_builder_only_1127/assistment_1127_train.csv'
-valid_path = './data/ASSISTment_skill_builder_only_1127/assistment_1127_valid.csv'
-test_path = './data/ASSISTment_skill_builder_only_1127/assistment_1127_test.csv'
-save_dir_prefix = './results/assitment_1127/'
+if args.dataset == 'assist2009':
+    train_path = './data/assist2009_updated/assist2009_updated_train1.csv'
+    valid_path = './data/assist2009_updated/assist2009_updated_valid1.csv'
+    test_path = './data/assist2009_updated/assist2009_updated_test.csv'
+    save_dir_prefix = './results/assist2009_updated/'
+elif args.dataset == 'assist2009_1127':
+    train_path = './data/ASSISTment_skill_builder_only_1127/assistment_1127_train.csv'
+    valid_path = './data/ASSISTment_skill_builder_only_1127/assistment_1127_valid.csv'
+    test_path = './data/ASSISTment_skill_builder_only_1127/assistment_1127_test.csv'
+    save_dir_prefix = './results/assitment_1127/'
 
 
 def main():
