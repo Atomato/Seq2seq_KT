@@ -19,6 +19,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 parser = argparse.ArgumentParser()
 
 # data file configuration
+parser.add_argument('--num_epochs', type=int, default=30)
 parser.add_argument('--dataset', type=str, default='assist2009')
 parser.add_argument('--no-emb-layer', dest='emb_layer', action='store_false')
 args = parser.parse_args()
@@ -31,7 +32,7 @@ rnn_cells = {
 }
 
 num_runs = 5
-num_epochs = 30
+num_epochs = args.num_epochs
 batch_size = 128
 keep_prob = 0.5
 

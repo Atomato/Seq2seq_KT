@@ -181,9 +181,11 @@ class DKT(object):
                 feed_dict=feed_dict
             )
 
+            next_pred = y_corr_batch[:, 0]  # B x Q
+
             for di in range(y_seq_batch.shape[1] - 1):
                 y_t_1 = np.concatenate(
-                    (y_seq_batch[:, di], y_corr_batch[:, di]), axis=1)
+                    (y_seq_batch[:, di], next_pred), axis=1)
                 y_t_1 = np.expand_dims(y_t_1, axis=1)
 
                 feed_dict = {
@@ -201,9 +203,18 @@ class DKT(object):
                 )
 
                 # mask padding questions
-                nonzero_index = y_seq_batch[:, di+1].nonzero()
+                # 2 x non-zero B
+                nonzero_index = y_seq_batch[:, di + 1].nonzero()
+                # non-zero B
                 y_pred += final_pred[nonzero_index].tolist()
-                y_true += y_corr_batch[:, di+1][nonzero_index].tolist()
+                # non-zero B
+                y_true += y_corr_batch[:, di + 1][nonzero_index].tolist()
+
+                # store the next question correctness predition
+                rng = np.random.default_rng()
+                next_prob = final_pred * \
+                    y_seq_batch[:, di + 1]  # one-hot, B x Q
+                next_pred = rng.binomial(1, next_prob)  # one-hot, B x Q
 
             # y_pred += [p for p in _target_preds]
             # y_true += [t for t in _target_labels]
