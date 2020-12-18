@@ -127,17 +127,30 @@ class Model(object):
             variable_scope_name = "hidden_layer_{}".format(i)
             with tf.variable_scope(variable_scope_name, reuse=tf.get_variable_scope().reuse):
                 cell = self.rnn_cell(num_units=layer_state_size)
+                initial_state = cell.get_initial_state(hidden_layer_input)
+
+                self.c_state = tf.placeholder_with_default(
+                    initial_state[0], [None, self.hidden_layer_structure[-1]])
+                self.h_state = tf.placeholder_with_default(
+                    initial_state[1], [None, self.hidden_layer_structure[-1]])
+
                 cell = tf.contrib.rnn.DropoutWrapper(
-                    cell, output_keep_prob=self.keep_prob)
+                    cell, output_keep_prob=self.keep_prob, state_keep_prob=self.keep_prob)
                 outputs, state = tf.nn.dynamic_rnn(
                     cell,
                     hidden_layer_input,
                     dtype=tf.float32,
-                    sequence_length=self.seq_length
+                    sequence_length=self.seq_length,
+                    initial_state=tf.contrib.rnn.LSTMStateTuple(
+                        self.c_state, self.h_state)
                 )
             self.hidden_layers_outputs.append(outputs)
             self.hidden_layers_state.append(state)
             hidden_layer_input = outputs
+
+    def _encode(self):
+        # Batch x Hidden (cell state), Batch x Hidden (hidden state)
+        self.last_layer_cell, self.last_layer_hidden = self.hidden_layers_state[-1]
 
     def _create_loss(self):
         print("Creating Loss...")
@@ -159,6 +172,14 @@ class Model(object):
             self.logits = tf.reshape(
                 self.logits_flat, shape=[-1, num_steps, self.num_problems])
             self.preds = tf.sigmoid(self.logits)
+
+            # prediction from last layer hidden
+            self.hidden_flat = tf.reshape(
+                self.last_layer_hidden, shape=[-1, last_layer_size])
+            self.final_logit_flat = tf.matmul(self.hidden_flat, W_yh) + b_yh
+            self.final_logit = tf.reshape(
+                self.final_logit_flat, shape=[-1, self.num_problems])
+            self.final_pred = tf.sigmoid(self.final_logit)
 
             # self.preds_flat = tf.sigmoid(self.logits_flat)
             # y_seq_flat = tf.cast(tf.reshape(self.y_seq, [-1, self.num_problems]), dtype=tf.float32)
@@ -239,6 +260,7 @@ class Model(object):
             else:
                 self._entire_input_embedding()
         self._influence()
+        self._encode()
         self._create_loss()
         self._create_optimizer()
         self._add_summary()

@@ -106,6 +106,19 @@ class DKT(object):
         iteration = 1
         for batch_idx in range(data.num_batches):
             X_batch, y_seq_batch, y_corr_batch = data.next_batch()
+
+            # concatenate x and y
+            _X_batch = np.concatenate(
+                (y_seq_batch[:, :-1], y_corr_batch[:, :-1]), axis=2)
+            _y_seq_batch, _y_corr_batch = \
+                [X_batch[:, 1:, :self.num_problems],
+                    X_batch[:, 1:, self.num_problems:]]
+
+            X_batch = np.concatenate((X_batch, _X_batch), axis=1)
+            y_seq_batch = np.concatenate((_y_seq_batch, y_seq_batch), axis=1)
+            y_corr_batch = np.concatenate(
+                (_y_corr_batch, y_corr_batch), axis=1)
+
             feed_dict = {
                 model.X: X_batch,
                 model.y_seq: y_seq_batch,
@@ -157,33 +170,54 @@ class DKT(object):
         auc_score = 0.0
         for batch_idx in range(data.num_batches):
             X_batch, y_seq_batch, y_corr_batch = data.next_batch()
+
+            # encoding
             feed_dict = {
                 model.X: X_batch,
-                model.y_seq: y_seq_batch,
-                model.y_corr: y_corr_batch,
                 model.keep_prob: 1,
             }
-            _target_preds, _target_labels, _target_preds_current, _target_labels_current, _loss = sess.run(
-                [model.target_preds,
-                 model.target_labels,
-                 model.target_preds_current,
-                 model.target_labels_current,
-                 model.loss],
+            c_state, h_state = sess.run(
+                [model.last_layer_cell, model.last_layer_hidden],
                 feed_dict=feed_dict
             )
-            y_pred += [p for p in _target_preds]
-            y_true += [t for t in _target_labels]
-            y_pred_current += [p for p in _target_preds_current]
-            y_true_current += [t for t in _target_labels_current]
-            loss = (iteration - 1) / iteration * loss + _loss / iteration
+
+            for di in range(y_seq_batch.shape[1] - 1):
+                y_t_1 = np.concatenate(
+                    (y_seq_batch[:, di], y_corr_batch[:, di]), axis=1)
+                y_t_1 = np.expand_dims(y_t_1, axis=1)
+
+                feed_dict = {
+                    model.X: y_t_1,
+                    model.c_state: c_state,
+                    model.h_state: h_state,
+                    model.keep_prob: 1,
+                }
+
+                final_pred, c_state, h_state = sess.run(
+                    [model.final_pred,
+                     model.last_layer_cell,
+                     model.last_layer_hidden],
+                    feed_dict=feed_dict
+                )
+
+                # mask padding questions
+                nonzero_index = y_seq_batch[:, di+1].nonzero()
+                y_pred += final_pred[nonzero_index].tolist()
+                y_true += y_corr_batch[:, di+1][nonzero_index].tolist()
+
+            # y_pred += [p for p in _target_preds]
+            # y_true += [t for t in _target_labels]
+            # y_pred_current += [p for p in _target_preds_current]
+            # y_true_current += [t for t in _target_labels_current]
+            # loss = (iteration - 1) / iteration * loss + _loss / iteration
             iteration += 1
         try:
             acc_score = accuracy_score(np.array(y_true), np.round(y_pred))
             fpr, tpr, thres = roc_curve(y_true, y_pred, pos_label=1)
             auc_score = auc(fpr, tpr)
-            fpr, tpr, thres = roc_curve(
-                y_true_current, y_pred_current, pos_label=1)
-            auc_score_current = auc(fpr, tpr)
+            # fpr, tpr, thres = roc_curve(
+            #     y_true_current, y_pred_current, pos_label=1)
+            # auc_score_current = auc(fpr, tpr)
         except ValueError:
             self._log(
                 "Value Error is encountered during finding the auc_score. Assign the AUC to 0 now.")
@@ -252,7 +286,7 @@ class DKT(object):
                     best_valid_acc = acc_valid
                     best_valid_auc = auc_valid
                     best_valid_auc_current = auc_current_valid
-                    best_waviness_l1, best_waviness_l2 = self.waviness('valid')
+                    # best_waviness_l1, best_waviness_l2 = self.waviness('valid')
 
                     acc_test, auc_test, auc_current_test, loss_test = self.evaluate(
                         'test')
@@ -264,14 +298,14 @@ class DKT(object):
                         loss_test)
 
                     # finding m1, m2
-                    m1, m2 = self.consistency('valid')
-                    best_consistency_m1 = m1
-                    best_consistency_m2 = m2
+                    # m1, m2 = self.consistency('valid')
+                    # best_consistency_m1 = m1
+                    # best_consistency_m2 = m2
 
-                    valid_msg += "\nw_l1: {0:5}, w_l2: {1:5}".format(
-                        best_waviness_l1, best_waviness_l2)
-                    valid_msg += "\nm1: {0:5}, m2: {1:5}".format(
-                        best_consistency_m1, best_consistency_m2)
+                    # valid_msg += "\nw_l1: {0:5}, w_l2: {1:5}".format(
+                    #     best_waviness_l1, best_waviness_l2)
+                    # valid_msg += "\nm1: {0:5}, m2: {1:5}".format(
+                    #     best_consistency_m1, best_consistency_m2)
                     if self.save:
                         valid_msg += ". Saving the model"
                         self.save_model()

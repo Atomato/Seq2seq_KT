@@ -20,6 +20,7 @@ parser = argparse.ArgumentParser()
 
 # data file configuration
 parser.add_argument('--dataset', type=str, default='assist2009')
+parser.add_argument('--no-emb-layer', dest='emb_layer', action='store_false')
 args = parser.parse_args()
 
 rnn_cells = {
@@ -44,7 +45,7 @@ network_config['max_grad_norm'] = 5.0
 network_config['lambda_w1'] = 0.003
 network_config['lambda_w2'] = 3.0
 network_config['lambda_o'] = 0.1
-network_config['emb_layer'] = True
+network_config['emb_layer'] = args.emb_layer
 network_config['skill_separate_emb'] = True
 network_config['expand_correct_dim'] = False
 network_config['embedding_dims'] = 200
