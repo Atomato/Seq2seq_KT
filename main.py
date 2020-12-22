@@ -19,7 +19,14 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 parser = argparse.ArgumentParser()
 
 # data file configuration
-parser.add_argument('--num_epochs', type=int, default=30)
+parser.add_argument("-lw1", "--lambda_w1", type=float, default=0.00,
+                    help="The lambda coefficient for the regularization waviness with l1-norm.")
+parser.add_argument("-lw2", "--lambda_w2", type=float, default=0.00,
+                    help="The lambda coefficient for the regularization waviness with l2-norm.")
+parser.add_argument("-lo", "--lambda_o", type=float, default=0.00,
+                    help="The lambda coefficient for the regularization objective.")
+parser.add_argument('--num_epochs', type=int, default=30,
+                    help="Whether to add skill embedding layer after input.")
 parser.add_argument('--dataset', type=str, default='assist2009')
 parser.add_argument('--no-emb-layer', dest='emb_layer', action='store_false')
 args = parser.parse_args()
@@ -43,9 +50,9 @@ network_config['learning_rate'] = 1e-2
 network_config['keep_prob'] = keep_prob
 network_config['rnn_cell'] = rnn_cells['LSTM']
 network_config['max_grad_norm'] = 5.0
-network_config['lambda_w1'] = 0.003
-network_config['lambda_w2'] = 3.0
-network_config['lambda_o'] = 0.1
+network_config['lambda_w1'] = args.lambda_w1  # dkt plus: 0.003
+network_config['lambda_w2'] = args.lambda_w2  # dkt plus: 3.0
+network_config['lambda_o'] = args.lambda_o  # dkt plus: 0.1
 network_config['emb_layer'] = args.emb_layer
 network_config['skill_separate_emb'] = True
 network_config['expand_correct_dim'] = False
