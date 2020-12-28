@@ -15,7 +15,8 @@ def one_hot(indices, depth):
 
 
 class OriginalInputProcessor(object):
-    def process_problems_and_corrects(self, problem_seqs, correct_seqs, num_problems, is_encode, is_train=True):
+    def process_problems_and_corrects(self, problem_seqs, correct_seqs, num_problems, is_encode,
+                                      is_train=True, is_entire_sequence=False):
         """
         This function aims to process the problem sequence and the correct sequence into a DKT feedable X and y.
         :param problem_seqs: it is in shape [batch_size, None]
@@ -44,18 +45,35 @@ class OriginalInputProcessor(object):
         correct_seqs_oh = one_hot(correct_seqs_pad, depth=num_problems)
 
         # slice out the x and y
-        if is_train:
-            x_problem_seqs = problem_seqs_oh[:, :]
-            x_correct_seqs = correct_seqs_oh[:, :]
-        else:
-            x_problem_seqs = problem_seqs_oh[:, :]
-            x_correct_seqs = correct_seqs_oh[:, :]
+        if is_entire_sequence:
+            if is_train:
+                x_problem_seqs = problem_seqs_oh[:, :-1]
+                x_correct_seqs = correct_seqs_oh[:, :-1]
+                y_problem_seqs = problem_seqs_oh[:, 1:]
+                y_correct_seqs = correct_seqs_oh[:, 1:]
+            else:
+                x_problem_seqs = problem_seqs_oh[:, :]
+                x_correct_seqs = correct_seqs_oh[:, :]
+                y_problem_seqs = problem_seqs_oh[:, :]
+                y_correct_seqs = correct_seqs_oh[:, :]
 
-        if is_encode:
             X = np.concatenate((x_problem_seqs, x_correct_seqs), axis=2)
-            return X
+
+            result = (X, y_problem_seqs, y_correct_seqs)
+            return result
         else:
-            return (x_problem_seqs, x_correct_seqs)
+            if is_train:
+                x_problem_seqs = problem_seqs_oh[:, :]
+                x_correct_seqs = correct_seqs_oh[:, :]
+            else:
+                x_problem_seqs = problem_seqs_oh[:, :]
+                x_correct_seqs = correct_seqs_oh[:, :]
+
+            if is_encode:
+                X = np.concatenate((x_problem_seqs, x_correct_seqs), axis=2)
+                return X
+            else:
+                return (x_problem_seqs, x_correct_seqs)
 
 
 class BatchGenerator:
@@ -63,9 +81,12 @@ class BatchGenerator:
     Generate batch for DKT model
     """
 
-    def __init__(self, encode_problem_seqs, encode_correct_seqs, decode_problem_seqs, decode_correct_seqs,
+    def __init__(self, problem_seqs, correct_seqs,
+                 encode_problem_seqs, encode_correct_seqs, decode_problem_seqs, decode_correct_seqs,
                  num_problems, batch_size, input_processor=OriginalInputProcessor(), **kwargs):
         self.cursor = 0  # point to the current batch index
+        self.problem_seqs = problem_seqs
+        self.correct_seqs = correct_seqs
         self.encode_problem_seqs = encode_problem_seqs
         self.encode_correct_seqs = encode_correct_seqs
         self.decode_problem_seqs = decode_problem_seqs
@@ -77,30 +98,41 @@ class BatchGenerator:
         self.input_processor = input_processor
         self._current_batch = None
 
-    def next_batch(self, is_train=True):
+    def next_batch(self, is_train=True, is_entire_sequence=False):
         start_idx = self.cursor * self.batch_size
         end_idx = min((self.cursor + 1) * self.batch_size, self.num_samples)
+        problem_seqs = self.problem_seqs[start_idx:end_idx]
+        correct_seqs = self.correct_seqs[start_idx:end_idx]
         encode_problem_seqs = self.encode_problem_seqs[start_idx:end_idx]
         encode_correct_seqs = self.encode_correct_seqs[start_idx:end_idx]
         decode_problem_seqs = self.decode_problem_seqs[start_idx:end_idx]
         decode_correct_seqs = self.decode_correct_seqs[start_idx:end_idx]
 
-        # x_problem_seqs, x_correct_seqs, y_problem_seqs, y_correct_seqs
-        X = self.input_processor.process_problems_and_corrects(encode_problem_seqs,
-                                                               encode_correct_seqs,
-                                                               self.num_problems,
-                                                               is_encode=True,
-                                                               is_train=is_train)
+        if is_entire_sequence:
+            # x_problem_seqs, x_correct_seqs, y_problem_seqs, y_correct_seqs
+            self._current_batch = self.input_processor.process_problems_and_corrects(problem_seqs,
+                                                                                     correct_seqs,
+                                                                                     self.num_problems,
+                                                                                     is_encode=True,
+                                                                                     is_train=is_train,
+                                                                                     is_entire_sequence=is_entire_sequence)
+        else:
+            # x_problem_seqs, x_correct_seqs, y_problem_seqs, y_correct_seqs
+            X = self.input_processor.process_problems_and_corrects(encode_problem_seqs,
+                                                                   encode_correct_seqs,
+                                                                   self.num_problems,
+                                                                   is_encode=True,
+                                                                   is_train=is_train)
 
-        # x_problem_seqs, x_correct_seqs, y_problem_seqs, y_correct_seqs
-        y_problem_seqs, y_correct_seqs = \
-            self.input_processor.process_problems_and_corrects(decode_problem_seqs,
-                                                               decode_correct_seqs,
-                                                               self.num_problems,
-                                                               is_encode=False,
-                                                               is_train=is_train)
+            # x_problem_seqs, x_correct_seqs, y_problem_seqs, y_correct_seqs
+            y_problem_seqs, y_correct_seqs = \
+                self.input_processor.process_problems_and_corrects(decode_problem_seqs,
+                                                                   decode_correct_seqs,
+                                                                   self.num_problems,
+                                                                   is_encode=False,
+                                                                   is_train=is_train)
 
-        self._current_batch = (X, y_problem_seqs, y_correct_seqs)
+            self._current_batch = (X, y_problem_seqs, y_correct_seqs)
 
         self._update_cursor()
         return self._current_batch
@@ -166,7 +198,8 @@ def read_data_from_csv(filename):
         decode_problem_seq = problem_seq[slice_idx:]
         decode_correct_seq = correct_seq[slice_idx:]
 
-        tup = (seq_length, encode_problem_seq, encode_correct_seq,
+        tup = (seq_length, problem_seq, correct_seq,
+               encode_problem_seq, encode_correct_seq,
                decode_problem_seq, decode_correct_seq)
         tuples.append(tup)
 
@@ -200,26 +233,35 @@ class DKTData:
         self.max_seq_length = max(
             max_seq_length_train, max_seq_length_test, max_seq_length_valid)
 
-        encode_problem_seqs = [student[1] for student in self.students_train]
-        encode_correct_seqs = [student[2] for student in self.students_train]
-        decode_problem_seqs = [student[3] for student in self.students_train]
-        decode_correct_seqs = [student[4] for student in self.students_train]
+        problem_seqs = [student[1] for student in self.students_train]
+        correct_seqs = [student[2] for student in self.students_train]
+        encode_problem_seqs = [student[3] for student in self.students_train]
+        encode_correct_seqs = [student[4] for student in self.students_train]
+        decode_problem_seqs = [student[5] for student in self.students_train]
+        decode_correct_seqs = [student[6] for student in self.students_train]
         self.train = BatchGenerator(
+            problem_seqs, correct_seqs,
             encode_problem_seqs, encode_correct_seqs, decode_problem_seqs, decode_correct_seqs,
             self.num_problems, batch_size)
 
-        encode_problem_seqs = [student[1] for student in self.students_valid]
-        encode_correct_seqs = [student[2] for student in self.students_valid]
-        decode_problem_seqs = [student[3] for student in self.students_valid]
-        decode_correct_seqs = [student[4] for student in self.students_valid]
+        problem_seqs = [student[1] for student in self.students_valid]
+        correct_seqs = [student[2] for student in self.students_valid]
+        encode_problem_seqs = [student[3] for student in self.students_valid]
+        encode_correct_seqs = [student[4] for student in self.students_valid]
+        decode_problem_seqs = [student[5] for student in self.students_valid]
+        decode_correct_seqs = [student[6] for student in self.students_valid]
         self.valid = BatchGenerator(
+            problem_seqs, correct_seqs,
             encode_problem_seqs, encode_correct_seqs, decode_problem_seqs, decode_correct_seqs,
             self.num_problems, batch_size)
 
-        encode_problem_seqs = [student[1] for student in self.students_test]
-        encode_correct_seqs = [student[2] for student in self.students_test]
-        decode_problem_seqs = [student[3] for student in self.students_test]
-        decode_correct_seqs = [student[4] for student in self.students_test]
+        problem_seqs = [student[1] for student in self.students_test]
+        correct_seqs = [student[2] for student in self.students_test]
+        encode_problem_seqs = [student[3] for student in self.students_test]
+        encode_correct_seqs = [student[4] for student in self.students_test]
+        decode_problem_seqs = [student[5] for student in self.students_test]
+        decode_correct_seqs = [student[6] for student in self.students_test]
         self.test = BatchGenerator(
+            problem_seqs, correct_seqs,
             encode_problem_seqs, encode_correct_seqs, decode_problem_seqs, decode_correct_seqs,
             self.num_problems, batch_size)

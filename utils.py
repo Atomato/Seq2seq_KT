@@ -109,19 +109,8 @@ class DKT(object):
         y_true = []
         iteration = 1
         for batch_idx in range(data.num_batches):
-            X_batch, y_seq_batch, y_corr_batch = data.next_batch()
-
-            # concatenate x and y
-            _X_batch = np.concatenate(
-                (y_seq_batch[:, :-1], y_corr_batch[:, :-1]), axis=2)
-            _y_seq_batch, _y_corr_batch = \
-                [X_batch[:, 1:, :self.num_problems],
-                    X_batch[:, 1:, self.num_problems:]]
-
-            X_batch = np.concatenate((X_batch, _X_batch), axis=1)
-            y_seq_batch = np.concatenate((_y_seq_batch, y_seq_batch), axis=1)
-            y_corr_batch = np.concatenate(
-                (_y_corr_batch, y_corr_batch), axis=1)
+            X_batch, y_seq_batch, y_corr_batch = data.next_batch(
+                is_entire_sequence=True)
 
             feed_dict = {
                 model.X: X_batch,
@@ -189,8 +178,12 @@ class DKT(object):
 
             for di in range(y_seq_batch.shape[1] - 1):
                 y_t_1 = np.concatenate(
-                    (y_seq_batch[:, di], next_pred), axis=1)
-                y_t_1 = np.expand_dims(y_t_1, axis=1)
+                    (y_seq_batch[:, di], next_pred), axis=1)  # B x 2Q
+                y_t_1 = np.expand_dims(y_t_1, axis=1)  # B x 1 x 2Q
+
+                # y_t_1 = np.concatenate(
+                #     (y_seq_batch[:, 0], y_corr_batch[:, 0]), axis=1)  # B x 2Q
+                # y_t_1 = np.expand_dims(y_t_1, axis=1)  # B x 1 x 2Q
 
                 feed_dict = {
                     model.X: y_t_1,
@@ -205,6 +198,11 @@ class DKT(object):
                      model.last_layer_hidden],
                     feed_dict=feed_dict
                 )
+
+                # final_pred = sess.run(
+                #     model.final_pred,
+                #     feed_dict=feed_dict
+                # )
 
                 # mask padding questions
                 # 2 x non-zero B
@@ -618,7 +616,8 @@ class DKT(object):
         total_num_steps = 0.0
         for batch_idx in range(data.num_batches):
             # print('batch:', batch_idx, end='\r')
-            X_batch, y_seq_batch, y_corr_batch = data.next_batch(is_train)
+            X_batch, y_seq_batch, y_corr_batch = data.next_batch(
+                is_train, is_entire_sequence=True)
             feed_dict = {
                 model.X: X_batch,
                 model.y_seq: y_seq_batch,
@@ -658,7 +657,8 @@ class DKT(object):
         waviness_l2 = 0.0
         total_num_steps = 0.0
         for batch_idx in range(data.num_batches):
-            X_batch, y_seq_batch, y_corr_batch = data.next_batch(is_train)
+            X_batch, y_seq_batch, y_corr_batch = data.next_batch(
+                is_train, is_entire_sequence=True)
 
             feed_dict = {
                 model.X: X_batch,
@@ -747,7 +747,8 @@ class DKT(object):
             # X_batch: one hot encoded (q_t, a_t)
             # y_seq_batch: one hot encoded (q_t), \deltadm{q_t}
             # y_corr_batch: one hot encoded (a_t)
-            X_batch, y_seq_batch, y_corr_batch = data.next_batch(is_train)
+            X_batch, y_seq_batch, y_corr_batch = data.next_batch(
+                is_train, is_entire_sequence=True)
             seq_length_batch = np.sum(_seq_length(y_seq_batch[:, 1:, :]))
 
             feed_dict = {
