@@ -80,7 +80,11 @@ class DKT(object):
         if not os.path.exists(self.log_save_dir):
             os.makedirs(self.log_save_dir)
         self.log_file_path = os.path.join(
-            self.log_save_dir, "{}_{}.log".format(model_name, str(time.time())))
+            self.log_save_dir, "{}_{}.log".format(model_name,
+                                                  time.strftime(
+                                                      '%y%m%d_%H%M%S', time.localtime(time.time()))
+                                                  )
+        )
         self.logging = logging
         self.save = save
 
