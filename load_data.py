@@ -75,6 +75,22 @@ class OriginalInputProcessor(object):
             else:
                 return (x_problem_seqs, x_correct_seqs)
 
+    def process_masks(self, encode_problem_seqs, decode_problem_seqs, num_problems):
+        mask_seqs = []
+        for enc_prob_seq, dec_prob_seq in zip(encode_problem_seqs, decode_problem_seqs):
+            mask = [-1] * len(enc_prob_seq) + dec_prob_seq
+            mask_seqs.append(mask)
+
+        # pad the sequence with the maximum sequence length
+        max_seq_length = max([len(problem) for problem in mask_seqs])
+        mask_seqs_pad = np.array(
+            [pad(problem, max_seq_length, target_value=-1) for problem in mask_seqs])
+
+        # one hot encode the information
+        mask_seqs_oh = one_hot(mask_seqs_pad, depth=num_problems)
+
+        return mask_seqs_oh[:, 1:]
+
 
 class BatchGenerator:
     """
@@ -98,7 +114,7 @@ class BatchGenerator:
         self.input_processor = input_processor
         self._current_batch = None
 
-    def next_batch(self, is_train=True, is_entire_sequence=False):
+    def next_batch(self, is_train=True, is_entire_sequence=False, is_mask=False):
         start_idx = self.cursor * self.batch_size
         end_idx = min((self.cursor + 1) * self.batch_size, self.num_samples)
         problem_seqs = self.problem_seqs[start_idx:end_idx]
@@ -116,6 +132,14 @@ class BatchGenerator:
                                                                                      is_encode=True,
                                                                                      is_train=is_train,
                                                                                      is_entire_sequence=is_entire_sequence)
+
+            if is_mask:
+                mask_seqs = self.input_processor.process_masks(
+                    encode_problem_seqs, decode_problem_seqs, self.num_problems)
+
+                self._update_cursor()
+                return self._current_batch, mask_seqs
+
         else:
             # x_problem_seqs, x_correct_seqs, y_problem_seqs, y_correct_seqs
             X = self.input_processor.process_problems_and_corrects(encode_problem_seqs,
@@ -150,8 +174,10 @@ class BatchGenerator:
         self.cursor = 0
 
     def shuffle(self):
-        self.encode_problem_seqs, self.encode_correct_seqs, \
+        self.problem_seqs, self.correct_seqs, \
+            self.encode_problem_seqs, self.encode_correct_seqs, \
             self.decode_problem_seqs,  self.decode_correct_seqs = shuffle(
+                self.problem_seqs, self.correct_seqs,
                 self.encode_problem_seqs, self.encode_correct_seqs,
                 self.decode_problem_seqs,  self.decode_correct_seqs, random_state=42)
 

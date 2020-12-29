@@ -58,6 +58,8 @@ class Model(object):
             tf.float32, [None, None, num_problems], name='y_seq')
         self.y_corr = tf.placeholder(
             tf.float32, [None, None, num_problems], name='y_corr')
+        self.mask_seq = tf.placeholder(
+            tf.float32, [None, None, num_problems], name='mask_seq')
         self.keep_prob = tf.placeholder(tf.float32)
         self.hidden_layer_input = self.X
         self.seq_length = length(self.X)
@@ -189,7 +191,7 @@ class Model(object):
             # Get the indices where y_seq_flat are not equal to 0, where the indices
             # implies that a student has answered the question in the time step and
             # thereby exclude those time step that the student hasn't answered.
-            target_indices = tf.where(tf.not_equal(self.y_seq, 0))
+            target_indices = tf.where(tf.not_equal(self.mask_seq, 0))
 
             self.target_logits = tf.gather_nd(self.logits, target_indices)
             self.target_preds = tf.gather_nd(

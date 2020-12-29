@@ -109,13 +109,14 @@ class DKT(object):
         y_true = []
         iteration = 1
         for batch_idx in range(data.num_batches):
-            X_batch, y_seq_batch, y_corr_batch = data.next_batch(
-                is_entire_sequence=True)
+            (X_batch, y_seq_batch, y_corr_batch), mask_seq_batch = data.next_batch(
+                is_entire_sequence=True, is_mask=True)
 
             feed_dict = {
                 model.X: X_batch,
                 model.y_seq: y_seq_batch,
                 model.y_corr: y_corr_batch,
+                model.mask_seq: mask_seq_batch,
                 model.keep_prob: keep_prob,
             }
             _, _target_preds, _target_labels, _loss = sess.run(
