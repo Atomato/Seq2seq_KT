@@ -29,6 +29,8 @@ parser.add_argument('--num_epochs', type=int, default=30,
                     help="Whether to add skill embedding layer after input.")
 parser.add_argument('--dataset', type=str, default='assist2009')
 parser.add_argument('--no-emb-layer', dest='emb_layer', action='store_false')
+parser.add_argument('--no-recurrent-test',
+                    dest='recurrent_test', action='store_false')
 args = parser.parse_args()
 
 rnn_cells = {
@@ -57,6 +59,7 @@ network_config['emb_layer'] = args.emb_layer
 network_config['skill_separate_emb'] = True
 network_config['expand_correct_dim'] = False
 network_config['embedding_dims'] = 200
+network_config['recurrent_test'] = args.recurrent_test
 
 if args.dataset == 'assist2009':
     train_path = './data/assist2009_updated/assist2009_updated_train1.csv'

@@ -178,13 +178,14 @@ class DKT(object):
             next_pred = y_corr_batch[:, 0]  # B x Q
 
             for di in range(y_seq_batch.shape[1] - 1):
-                y_t_1 = np.concatenate(
-                    (y_seq_batch[:, di], next_pred), axis=1)  # B x 2Q
-                y_t_1 = np.expand_dims(y_t_1, axis=1)  # B x 1 x 2Q
-
-                # y_t_1 = np.concatenate(
-                #     (y_seq_batch[:, 0], y_corr_batch[:, 0]), axis=1)  # B x 2Q
-                # y_t_1 = np.expand_dims(y_t_1, axis=1)  # B x 1 x 2Q
+                if self.network_config['recurrent_test']:
+                    y_t_1 = np.concatenate(
+                        (y_seq_batch[:, di], next_pred), axis=1)  # B x 2Q
+                    y_t_1 = np.expand_dims(y_t_1, axis=1)  # B x 1 x 2Q
+                else:
+                    y_t_1 = np.concatenate(
+                        (y_seq_batch[:, 0], y_corr_batch[:, 0]), axis=1)  # B x 2Q
+                    y_t_1 = np.expand_dims(y_t_1, axis=1)  # B x 1 x 2Q
 
                 feed_dict = {
                     model.X: y_t_1,
@@ -193,17 +194,18 @@ class DKT(object):
                     model.keep_prob: 1,
                 }
 
-                final_pred, c_state, h_state = sess.run(
-                    [model.final_pred,
-                     model.last_layer_cell,
-                     model.last_layer_hidden],
-                    feed_dict=feed_dict
-                )
-
-                # final_pred = sess.run(
-                #     model.final_pred,
-                #     feed_dict=feed_dict
-                # )
+                if self.network_config['recurrent_test']:
+                    final_pred, c_state, h_state = sess.run(
+                        [model.final_pred,
+                         model.last_layer_cell,
+                         model.last_layer_hidden],
+                        feed_dict=feed_dict
+                    )
+                else:
+                    final_pred = sess.run(
+                        model.final_pred,
+                        feed_dict=feed_dict
+                    )
 
                 # mask padding questions
                 # 2 x non-zero B
