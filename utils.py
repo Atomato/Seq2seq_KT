@@ -218,8 +218,9 @@ class DKT(object):
                 # store the next question correctness predition
                 rng = np.random.default_rng()
                 next_prob = final_pred * \
-                    y_seq_batch[:, di + 1]  # one-hot, B x Q
-                next_pred = rng.binomial(1, next_prob)  # one-hot, B x Q
+                    y_seq_batch[:, di + 1]  # B x Q
+                next_pred = next_prob
+                next_pred[next_pred > 0.5] = 1.  # one-hot, B x Q
 
             # y_pred += [p for p in _target_preds]
             # y_true += [t for t in _target_labels]

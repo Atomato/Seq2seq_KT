@@ -1,9 +1,9 @@
-# Sequence2Sequence KT
+# Sequence-to-Sequence KT
 
 - 학생의 현재 지식 수준 뿐 아니라 **미래의 지식 수준**을 예측
 
 - **Knowlege Tracing** ![KT](assets/KT.png)
-- **Sequence2Sequence Knowlege Tracing** ![KT](assets/Seq2SeqKT.png)
+- **Sequence-to-Sequence Knowlege Tracing** ![KT](assets/Seq2SeqKT.png)
 
 ## Model
 
@@ -90,14 +90,14 @@ optional arguments:
   average test AUC for 5 runs: 0.8236901502966262
   ```
 
-- Teacher forcing train, next prediction by sampling ![TFTrain](assets/TFTrain.png)
+- Teacher forcing train ![TFTrain](assets/TFTrain.png)
 
   ```log
-  test ACC for 5 runs : [0.6714413786233688, 0.6752266161968323, 0.677716904074111, 0.6617192947504732, 0.671979280804861]
-  test AUC for 5 runs : [0.638555515447901, 0.631095923976335, 0.6525283681389905, 0.6386572489386593, 0.6441125629028004]
+  test ACC for 5 runs : [0.697220838728957, 0.7007869309692201, 0.6974001394561211, 0.7025600159378425, 0.5976690905468672]
+  test AUC for 5 runs : [0.6636480589193581, 0.6625677643011423, 0.6474190308538542, 0.6685581243639807, 0.6153522883488112]
 
-  average test ACC for 5 runs: 0.6716166948899293
-  average test AUC for 5 runs: 0.6409899238809371
+  average test ACC for 5 runs: 0.6791274031278015
+  average test AUC for 5 runs: 0.6515090533574293
   ```
 
 - Teacher forcing train, no recurrent test ![TFTrain-NoReccTest](assets/TFTrain-NoReccTest.png)
@@ -112,7 +112,7 @@ optional arguments:
 
 ## ToDo List
 
-- [ ] Argmax pediction in test
+- [x] Argmax pediction in test
   - 문제 풀이 확률의 argmax 값을 다음 지식 수준 측정할 때 사용
 - [ ] Beam search inference in test
 - [ ] No teacher forcing in train
